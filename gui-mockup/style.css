@@ -89,6 +89,11 @@ ul.navbar-h li a:hover{
     color: #EEEEEE;
 }
 
+.module-list ul a.active{
+    background-color: orange;
+    font-weight: bold;
+}
+
 .module-list ul a:hover{
     background-color: #de7a28;
 }
