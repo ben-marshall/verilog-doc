@@ -5,6 +5,8 @@
 
 #include <stdio.h>
 
+#include "veridoc-config.h"
+
 #ifndef VERILOG_DOT_H
 #define VERILOG_DOT_H
 

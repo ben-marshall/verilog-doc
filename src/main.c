@@ -50,5 +50,6 @@ int main(int argc, char ** argv)
 {
     shell_args * args = parse_args(argc,argv);
 
+    free(args);
     return 0;
 }
