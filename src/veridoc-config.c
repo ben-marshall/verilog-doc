@@ -44,16 +44,15 @@ veridoc_config * veridoc_config_parse(
 
             // Read upto the equals to get the key:
             memset(key,'\0',255);
-            fscanf(fh, "%s=", key);
-            
-            // Read any leading spaces
-            while(fgetc(fh)==' ' && !feof(fh)){
-                // DO Nothing
-            }
+            fscanf(fh, "%s= ", key);
 
             // Now read to the end of the line.
             int i = 0;
             char toadd = fgetc(fh);
+            while(toadd == ' ' || toadd == '='){
+                toadd = fgetc(fh);
+            }
+
             while(i < 1023 && toadd != '\n' && toadd != '\0' && !feof(fh)){
                 value[i] = toadd;
                 toadd = fgetc(fh);
