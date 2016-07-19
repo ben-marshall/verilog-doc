@@ -8,7 +8,8 @@ set(VERIDOC_SRC main.c)
 set(VERIDOC_EXE veridoc)
 
 set(VERIDOC_CORE_SRC veridoc-config.c 
-                     veridoc-manifest.c)
+                     veridoc-manifest.c
+                     veridoc-parsing.c)
 
 set(VERIDOC_CORE     veridoccore)
 

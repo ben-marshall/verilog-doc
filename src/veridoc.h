@@ -8,6 +8,7 @@
 #include "veridoc-types.h"
 #include "veridoc-config.h"
 #include "veridoc-manifest.h"
+#include "veridoc-parsing.h"
 
 #ifndef VERIDOC_H
 #define VERIDOC_H
