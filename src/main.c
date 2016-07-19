@@ -116,7 +116,7 @@ int main(int argc, char ** argv)
         printf("Version:       %s\n", config -> v_version);
         printf("Input Files:   %d\n", manifest -> file_count);
         printf("\n");
-        printf("Starting parsing...");
+        printf("Starting parsing...\n");
     }
 
     veridoc_parse_input_source(manifest);
