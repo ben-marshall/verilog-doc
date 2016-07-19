@@ -1,20 +1,15 @@
 /*!
-@file verilog-dot.h
+@file veridoc-dot.h
 @brief Contains common data structures and functions used by the program
 */
 
 #include <stdio.h>
 
+#include "veridoc-types.h"
 #include "veridoc-config.h"
 
-#ifndef VERILOG_DOT_H
-#define VERILOG_DOT_H
-
-//! A simple boolean type.
-typedef enum boolean_e{
-    BOOL_TRUE  = 1,
-    BOOL_FALSE = 0
-} boolean;
+#ifndef VERIDOC_H
+#define VERIDOC_H
 
 /*!
 @brief Stores all of the command line arguments to the program
