@@ -21,6 +21,9 @@ typedef enum boolean_e{
 @see parse_args
 */
 typedef struct shell_args_t{
+    boolean     verbose;     //!< Be verbose with status messages?
+    char      * config_path; //!< Path to config file.
+    char      * manifest_path; //!< Path to input file list.
 } shell_args;
 
 /*!

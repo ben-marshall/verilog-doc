@@ -17,7 +17,8 @@ void print_help(boolean and_exit)
 printf("Usage: ./veridoc <options> <input files>\n"); 
 printf("Options:\n");
 printf("-v, --verbose              - Be verbose with status information.\n");
-printf("-C <file>, --config <file> - Set the configuration file path.\n");
+printf("-c <file>, --config <file> - Set the configuration file path.   \n");
+printf("-F <file>, --files  <file> - Input file manifest list.          \n");
 printf("\n");
 
     if(and_exit){
@@ -41,6 +42,25 @@ shell_args * parse_args(int argc, char ** argv)
     int i;  // Iterate over argv
     for(i = 1; i < argc; i++)
     {
+        if(strcmp("-v", argv[i]) == 0 ||
+           strcmp("--verbose", argv[i]) == 0)
+        {
+            tr -> verbose = BOOL_TRUE;
+        }
+        else if((strcmp("-c", argv[i]) == 0        ||
+                 strcmp("--config", argv[i]) == 0) &&
+                 i <= argc-1)
+        {
+            i++;
+            tr -> config_path = argv[i];
+        }
+        else if((strcmp("-F", argv[i]) == 0        ||
+                 strcmp("--files", argv[i]) == 0) &&
+                 i <= argc-1)
+        {
+            i++;
+            tr -> manifest_path= argv[i];
+        }
     }
 
     return tr;
@@ -48,8 +68,40 @@ shell_args * parse_args(int argc, char ** argv)
 
 int main(int argc, char ** argv)
 {
-    shell_args * args = parse_args(argc,argv);
+    shell_args     * args   = parse_args(argc,argv);
 
-    free(args);
-    return 0;
+    if(!args -> config_path){
+        print_help(BOOL_TRUE);
+    }
+
+    veridoc_config * config = veridoc_config_parse(args -> config_path);
+
+    if(!config){
+        print_help(BOOL_TRUE);
+    }
+
+    if(args -> manifest_path)
+    {
+        if(config -> v_manifest){
+            free(config -> v_manifest);
+        }
+        config -> v_manifest = args -> manifest_path;
+    }
+    else if(!config -> v_manifest)
+    {
+        config -> v_manifest = "Veridoc.cfg";
+    }
+
+    if(args -> verbose){
+        printf("Config Path:   %s\n", args -> config_path);
+        printf("File Manifest: %s\n", config -> v_manifest);
+        printf("Project:       %s\n", config -> v_project);
+        printf("Author:        %s\n", config -> v_author );
+        printf("Version:       %s\n", config -> v_version);
+    }
+
+
+    veridoc_config_free(config);
+
+return 0;
 }
