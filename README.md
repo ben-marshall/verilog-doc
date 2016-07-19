@@ -1,6 +1,8 @@
 
 # Verilog Doc
 
+[![Documentation](https://codedocs.xyz/ben-marshall/verilog-doc.svg)](https://codedocs.xyz/ben-marshall/verilog-doc/)
+
 My ideas on creating an automatic documentation generation tool for Verilog,
 using or abusing Doxygen to get there.
 
