@@ -1,0 +1,45 @@
+/*!
+
+@page veridoc-manifests Veridoc Manifest Files
+
+@tableofcontents
+
+@brief This page describes how veridoc manifest files are structured,
+loaded and interpreted.
+
+@details
+
+Manifest files specify the various input files to be parsed and documented.
+They also specify the directories which should be included to look for
+header files in.
+
+@section veridoc-manifest-file-format File Format
+
+These are very simple line-delimited file or folder paths. They can include
+comments, which start with a hash on the first character of a line.
+An example manifest might look like this:
+
+    # Include file locations
+    ./design/
+    ./design/alu/alu
+
+    # Source files to include
+    ./design/alu/alu_add.v
+    ./design/alu/alu_mul.v
+    ./design/alu/alu_div.v
+    ./design/alu/alu_shift.v
+    ./design/alu/alu_top.v
+
+It should be noted that files are read in the order that they are entered
+in the manifest file. Hence in the example above, `alu_top` is free to
+reference the other files, but `alu_mul` cannot depend on `alu_shift`.
+
+@section veridoc-manifest-representation Data Structure
+
+The manifest files are represented as lists of directories and files inside
+the @ref veridoc_manifest structure. This is created and free'd using the
+@ref veridoc_manifest_parse and @ref veridoc_manifest_free functions
+respectively.
+
+*/
+
