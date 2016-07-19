@@ -4,9 +4,8 @@ body{
     margin: 0px;
     font-family: Verdana,sans-serif;
     font-size: 12pt;
-    background-color: #CCCCCC;
+    background-color: #DEDEDE;
 }
-
 
 .header{
     background-color: #dddddd;
@@ -53,22 +52,27 @@ ul.navbar-h li a:hover{
     color: #222222;
 }
 
+.left-divider{
+    background-color: #333333;
+    position: fixed;
+    top:0px;
+    bottom:0px;
+    left:21%;
+    z-index: -1;
+}
+
 .module-list{
     float: left;
     width:20%;
-    border-radius: 2px;
-    border: 3px solid white;
     padding: 0px;
-    background-color: #999999;
-    overflow: auto;
 }
 
 .module-list ul{
     list-style-type: none;
     margin: 0px;
+    margin-top: 3px;
     padding: 0px;
     padding-left: 7pt;
-    overflow: hidden;
 }
 
 .module-list ul:first-child{
@@ -80,13 +84,14 @@ ul.navbar-h li a:hover{
 }
 
 .module-list ul a{
+    margin-top: 2px;
     display: block;
     width: 100%;
-    padding: 2px;
-    background-color: #777777;
+    padding: 4px;
+    background-color: #CCCCCC;
     border-bottom: 1px solid #555555;
     text-decoration: none;
-    color: #EEEEEE;
+    color: #333333;
 }
 
 .module-list ul a.active{
@@ -100,20 +105,26 @@ ul.navbar-h li a:hover{
 
 
 .page-content{
-    background-color: #EFEFEF;
     width: 54%;
     color: #222222;
     padding: 15px;
-    margin-left:5px;
+    margin-left:25px;
     margin-right:5px;
     float:left;
-    border-radius: 2px;
-    border: 3px solid white;
+}
+
+.centred{
+    padding: 15px;
+    margin: auto;
+    float: none;
 }
 
 .page-content .page-section{
-    border-bottom: 1px solid #999999;
-    margin-top: 30px;
+    margin-top: 15px;
+    margin-bottom: 3px;
+    padding: 5px;
+    background-color: white;
+    border-radius: 3px;
 }
 
 .page-content .page-section .page-section-title{
@@ -129,23 +140,19 @@ ul.navbar-h li a:hover{
     padding-bottom:5px;
 }
 
-.context-box{
-    width:20%;
-    border-radius: 2px;
-    border: 3px solid white;
-    padding: 10px;
-    margin:0px;
-    margin-right:10px;
-    background-color: #EFEFEF;
-    float: left;
+
+.page-list ul{
+    list-style-type: none;
+    margin-top: 10px;
+    padding: 0px;
 }
 
-.context-box ul{
-    list-style-type: none;
-    margin: 0px;
-    padding: 0px;
-    padding-left: 7pt;
-    overflow: hidden;
-    display: block;
-    width: 100%;
+
+.page-list ul li{
+    background-color: white;
+    margin-bottom: 3px;
+    padding: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 3px;
 }
