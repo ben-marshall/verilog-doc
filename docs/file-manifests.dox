@@ -1,6 +1,7 @@
 /*!
 
-@page veridoc-manifests Veridoc Manifest Files
+@defgroup veridoc-manifests Veridoc Manifest Files
+@ingroup veridoc-documentation
 
 @tableofcontents
 

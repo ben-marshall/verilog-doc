@@ -1,0 +1,12 @@
+/*!
+
+@defgroup veridoc-documentation Documentation
+@{
+
+@brief Top level group for all pages documenting veridoc, but which do not
+relate specifically to code.
+
+@}
+
+
+*/

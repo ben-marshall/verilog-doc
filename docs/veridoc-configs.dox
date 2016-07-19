@@ -1,6 +1,7 @@
 /*!
 
-@page veridoc-configs Veridoc Configuration Files
+@defgroup veridoc-configs Veridoc Configuration Files
+@ingroup veridoc-documentation
 
 @tableofcontents
 
@@ -28,6 +29,7 @@ A config file is represented in memory by the @ref veridoc_config structure.
 The files are parsed into memory by the @ref veridoc_config_parse function.
 
 @section veridoc-configs-fields Data Fields
-@todo This section
+
+@see veridoc_config
 
 */
