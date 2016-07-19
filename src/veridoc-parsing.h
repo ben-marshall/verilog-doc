@@ -13,5 +13,15 @@
 #ifndef VERIDOC_PARSING_H
 #define VERIDOC_PARSING_H
 
+/*!
+@brief Responsible for parsing each file in the manifest, and building the
+internal source tree.
+@param [in] manifest - The set of files to parse and directories to search.
+@returns The parsed source tree object. 
+*/
+verilog_source_tree * veridoc_parse_input_source(
+    veridoc_manifest * manifest
+);
+
 
 #endif

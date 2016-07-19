@@ -16,5 +16,8 @@ set(VERIDOC_CORE     veridoccore)
 add_library(${VERIDOC_CORE} ${VERIDOC_CORE_SRC})
 
 add_executable(${VERIDOC_EXE} ${VERIDOC_SRC})
-target_link_libraries(${VERIDOC_EXE} verilogparser)
-target_link_libraries(${VERIDOC_EXE} ${VERIDOC_CORE})
+
+target_link_libraries(${VERIDOC_EXE}  verilogparser)
+target_link_libraries(${VERIDOC_CORE} verilogparser)
+
+target_link_libraries(${VERIDOC_EXE}  ${VERIDOC_CORE})

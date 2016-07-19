@@ -115,7 +115,11 @@ int main(int argc, char ** argv)
         printf("Author:        %s\n", config -> v_author );
         printf("Version:       %s\n", config -> v_version);
         printf("Input Files:   %d\n", manifest -> file_count);
+        printf("\n");
+        printf("Starting parsing...");
     }
+
+    veridoc_parse_input_source(manifest);
 
     veridoc_config_free(config);
     veridoc_manifest_free(manifest);
