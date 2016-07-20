@@ -4,7 +4,7 @@ body{
     margin: 0px;
     font-family: Verdana,sans-serif;
     font-size: 12pt;
-    background-color: #DEDEDE;
+    background-color: #F9F9F9;
 }
 
 .header{
@@ -141,18 +141,3 @@ ul.navbar-h li a:hover{
 }
 
 
-.page-list ul{
-    list-style-type: none;
-    margin-top: 10px;
-    padding: 0px;
-}
-
-
-.page-list ul li{
-    background-color: white;
-    margin-bottom: 3px;
-    padding: 7px;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    border-radius: 3px;
-}
