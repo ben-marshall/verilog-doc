@@ -86,7 +86,7 @@ veridoc_config * veridoc_config_parse(
             }
             else if(strcmp(key,"top_module") == 0 && !tr -> v_top_module)
             {
-                tr -> v_manifest = value;
+                tr -> v_top_module = value;
                 value = calloc(1023,sizeof(char));
             }
             else

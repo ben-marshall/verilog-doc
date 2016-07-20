@@ -132,6 +132,99 @@ void veridoc_pf_export_module_list_json(
     fclose(fh);
 }
 
+/*!
+@brief Responsible for emitting the verilog module hierarchy as JSON.
+@note This is the recursive partner to @ref veridoc_pf_export_hierarchy_json
+@param [in] parent_module - The parent module.
+@param [in] source - The parsed source tree
+@param [in] fh - The file handle to use when writing.
+*/
+void veridoc_pf_export_hierarchy_json_r(
+    ast_module_declaration  * parent_module,
+    verilog_source_tree     * source,
+    FILE                    * fh
+){
+    ast_list * children = verilog_module_get_children(parent_module);
+
+    fprintf(fh,"[");
+    int c;
+
+    for(c = 0; c < children -> items; c++)
+    {
+        ast_module_instantiation * child = ast_list_get(children,c);
+
+        char * child_id;
+
+        if(child -> resolved){
+            child_id = child -> declaration -> identifier -> identifier;
+        } else {
+            child_id = child -> module_identifer -> identifier;
+        }
+
+        fprintf(fh,"{");
+        fprintf(fh,"\"id\":\"%s\",", child_id);
+        fprintf(fh,"\"children\":");
+        if(child -> resolved)
+        {
+            veridoc_pf_export_hierarchy_json_r(child->declaration,source,fh);
+        }
+        else
+        {
+            fprintf(fh,"[]");
+        }
+        fprintf(fh,"}");
+    }
+    
+    fprintf(fh,"]");
+}
+
+/*!
+@brief Responsible for emitting the verilog module hierarchy as JSON.
+@param [in] top_module - The top level module / root of the hierarchy.
+@param [in] source - The parsed source tree
+*/
+void veridoc_pf_export_hierarchy_json(
+    char                * top_module,
+    verilog_source_tree * source,
+    char                * destination
+){
+    FILE * fh = fopen(destination, "w");
+    if(!(fh)){
+        printf("ERROR: Could not open json file for writing: %s\n",
+            destination);
+        return;
+    }
+
+    fprintf(fh, "var veridocModuleHierarchy = {");
+
+    fprintf(fh,"\"listType\":\"module-hierarchy\",");
+    fprintf(fh,"\"listTitle\":\"Module Hierarchy\",");
+    fprintf(fh,"\"listNotes\":\"This is the module hierarchy for the project.\",");
+    fprintf(fh,"\"listData\":[");
+
+    ast_identifier root_id = ast_new_identifier(top_module,0);
+    ast_module_declaration * root = verilog_find_module_declaration(
+        source, root_id);
+    if(root == NULL)
+    {
+        printf("ERROR: Could not find top module: '%s'\n", top_module);
+        free(root_id);
+        return;
+    }
+    else
+    {
+
+        fprintf(fh,"{");
+        fprintf(fh,"\"id\":\"%s\",", top_module);
+        fprintf(fh,"\"children\":");
+        veridoc_pf_export_hierarchy_json_r(root,source,fh);
+        fprintf(fh,"}");
+    }
+
+    fprintf(fh, "]}");
+    fclose(fh);
+}
+
 
 /*!
 @brief Top level function for exporting the whole parsed data set to html.
@@ -152,6 +245,7 @@ void veridoc_pf_build(
     strcat(json_file, config -> v_output);
     strcat(json_file, "/file_list.js");
     veridoc_pf_export_file_list_json(manifest,json_file);
+    printf("File Manifest:      %s\n", json_file);
     free(json_file);
     
     // Next, export the module list as a JSON document.
@@ -159,5 +253,15 @@ void veridoc_pf_build(
     strcat(module_file, config -> v_output);
     strcat(module_file, "/module_list.js");
     veridoc_pf_export_module_list_json(source,module_file);
+    printf("Module Manifest:    %s\n", module_file);
     free(module_file);
+    
+    // Next, export the module hierarchy as a JSON document.
+    char * module_hier = calloc(strlen(config -> v_output) + 22, sizeof(char));
+    strcat(module_hier, config -> v_output);
+    strcat(module_hier, "/module_hierarchy.js");
+    veridoc_pf_export_hierarchy_json(config -> v_top_module,source,
+        module_hier);
+    printf("Module Hierarchy:   %s\n", module_hier);
+    free(module_hier);
 }

@@ -21,13 +21,13 @@ function veridoc_render_file_list(
         toset += "<li>";
         if(item.parsed == "1"){
             toset += "<div class='status good'>Found</div>";
+            if(item.success== "1"){
+                toset += "<div class='status good'>Parsed</div>";
+            } else {
+                toset += "<div class='status bad'>Syntax Errors</div>";
+            }
         } else {
             toset += "<div class='status bad'>Not Found</div>";
-        }
-        if(item.success== "1"){
-            toset += "<div class='status good'>Parsed</div>";
-        } else {
-            toset += "<div class='status bad'>Errors</div>";
         }
         
         toset += "<div class='item'>"+item.path+"</div>";
@@ -64,6 +64,16 @@ function veridoc_render_module_list(
     container.innerHTML = toset;
 }
 
+function veridoc_render_module_hierarchy(
+    listData,
+    container
+){
+    var toset = ""
+
+
+    container.innerHTML = toset;
+}
+
 /*
 Responsible for taking a JSON data structure and turning it into a list
 on the list.html page.
@@ -87,6 +97,8 @@ function veridoc_render_list(
         veridoc_render_file_list(listData, container);
     } else if (listType == "module-manifest") {
         veridoc_render_module_list(listData, container);  
+    } else if (listType == "module-hierarchy") {
+        veridoc_render_module_hierarchy(listData, container);  
     } else {
         container.innerText = "Error: unknown list type: "+listType;
     }

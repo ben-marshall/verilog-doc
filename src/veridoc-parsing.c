@@ -90,6 +90,7 @@ verilog_source_tree * veridoc_parse_input_source(
     verilog_source_tree * tr = yy_verilog_source_tree;
 
     // Resolve all of the module names.
+    printf("Resolving Modules...\n");
     verilog_resolve_modules(tr);
 
     return tr;
