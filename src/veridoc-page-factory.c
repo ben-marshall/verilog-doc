@@ -57,10 +57,12 @@ void veridoc_pf_export_file_list_json(
         return;
     }
 
-    fprintf(fh, "[");
+    fprintf(fh, "var veridocFileList = {");
 
-    fprintf(fh,"{\"list-type\":\"file-manifest\"},");
-    fprintf(fh,"{\"list-data\":[");
+    fprintf(fh,"\"listType\":\"file-manifest\",");
+    fprintf(fh,"\"listTitle\":\"List Of Documented Files\",");
+    fprintf(fh,"\"listNotes\":\"This is the list of all files specified as input to Veridoc, along with their parse status.\",");
+    fprintf(fh,"\"listData\":[");
 
     int f;
     for(f = 0; f < manifest -> file_count;  f++)
@@ -79,7 +81,7 @@ void veridoc_pf_export_file_list_json(
         }
     }
 
-    fprintf(fh, "]}]");
+    fprintf(fh, "]}");
     fclose(fh);
 }
 
@@ -101,7 +103,7 @@ void veridoc_pf_build(
     // Next, export the file list as a JSON document.
     char * json_file = calloc(strlen(config -> v_output) + 16, sizeof(char));
     strcat(json_file, config -> v_output);
-    strcat(json_file, "/file_list.json");
+    strcat(json_file, "/file_list.js");
     veridoc_pf_export_file_list_json(manifest,json_file);
     free(json_file);
 }
