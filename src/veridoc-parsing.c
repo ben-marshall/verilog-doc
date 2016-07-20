@@ -89,5 +89,8 @@ verilog_source_tree * veridoc_parse_input_source(
     // parser library.
     verilog_source_tree * tr = yy_verilog_source_tree;
 
+    // Resolve all of the module names.
+    verilog_resolve_modules(tr);
+
     return tr;
 }

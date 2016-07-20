@@ -9,6 +9,7 @@
 #include "veridoc-config.h"
 #include "veridoc-manifest.h"
 #include "veridoc-parsing.h"
+#include "veridoc-page-factory.h"
 
 #ifndef VERIDOC_H
 #define VERIDOC_H

@@ -69,6 +69,11 @@ veridoc_config * veridoc_config_parse(
                 tr -> v_author = value;
                 value = calloc(1023,sizeof(char));
             }
+            else if(strcmp(key,"output") == 0 && !tr -> v_author)
+            {
+                tr -> v_output= value;
+                value = calloc(1023,sizeof(char));
+            }
             else if(strcmp(key,"version") == 0 && !tr -> v_version)
             {
                 tr -> v_version= value;
@@ -88,6 +93,11 @@ veridoc_config * veridoc_config_parse(
                 }
             }
         }
+    }
+
+    if(tr -> v_output == NULL)
+    {
+        strcat(tr -> v_output, "./veridoc-out");
     }
 
     free(key);

@@ -11,16 +11,6 @@
 #define VERIDOC_CONFIG_H
 
 /*!
-Stores the names of the various configuration options.
-*/
-typedef enum veridoc_config_key_e{
-    CFGKEY_PROJECT,
-    CFGKEY_AUTHOR,
-    CFGKEY_VERSION,
-    CFGKEY_MANIFEST,
-} veridoc_config_key;
-
-/*!
 @brief Contains all of the configuration options for a run of veridoc.
 */
 typedef struct veridoc_config_t{
@@ -29,6 +19,7 @@ typedef struct veridoc_config_t{
     char * v_author;    //!< Documentation Authors
     char * v_version;   //!< Version Number
     char * v_manifest;  //!< File manifest path.
+    char * v_output;    //!< Folder to put the results in.
 
 } veridoc_config;
 

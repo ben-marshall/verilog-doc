@@ -115,12 +115,18 @@ int main(int argc, char ** argv)
         printf("Author:        %s\n", config -> v_author );
         printf("Version:       %s\n", config -> v_version);
         printf("Input Files:   %d\n", manifest -> file_count);
+        printf("Output To:     %s\n", config-> v_output);
         printf("\n");
         printf("Starting parsing...\n");
     }
-
-    veridoc_parse_input_source(manifest);
-
+    
+    // Read in all of the source files.
+    verilog_source_tree * source = veridoc_parse_input_source(manifest);
+    
+    // Build the output documentation.
+    veridoc_pf_build(manifest, config, source);
+    
+    // Free everything
     veridoc_config_free(config);
     veridoc_manifest_free(manifest);
 
