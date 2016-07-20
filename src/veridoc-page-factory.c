@@ -59,6 +59,9 @@ void veridoc_pf_export_file_list_json(
 
     fprintf(fh, "[");
 
+    fprintf(fh,"{\"list-type\":\"file-manifest\"},");
+    fprintf(fh,"{\"list-data\":[");
+
     int f;
     for(f = 0; f < manifest -> file_count;  f++)
     {
@@ -76,7 +79,7 @@ void veridoc_pf_export_file_list_json(
         }
     }
 
-    fprintf(fh, "]");
+    fprintf(fh, "]}]");
     fclose(fh);
 }
 
