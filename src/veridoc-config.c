@@ -97,6 +97,7 @@ veridoc_config * veridoc_config_parse(
 
     if(tr -> v_output == NULL)
     {
+        tr -> v_output = calloc(15,sizeof(char));
         strcat(tr -> v_output, "./veridoc-out");
     }
 

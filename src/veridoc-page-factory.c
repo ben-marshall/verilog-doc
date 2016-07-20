@@ -57,12 +57,26 @@ void veridoc_pf_export_file_list_json(
         return;
     }
 
+    fprintf(fh, "[");
+
     int f;
     for(f = 0; f < manifest -> file_count;  f++)
     {
-        
+        fprintf(fh,"{");
+
+        veridoc_manifest_file file = manifest -> files[f];
+
+        fprintf(fh,"\"path\":\"%s\",", file.path);
+        fprintf(fh,"\"parsed\":\"%d\",", file.parsed);
+        fprintf(fh,"\"success\":\"%d\"", file.parse_success);
+
+        fprintf(fh,"}");
+        if(f < manifest -> file_count -1){
+            fprintf(fh,",");
+        }
     }
 
+    fprintf(fh, "]");
     fclose(fh);
 }
 
@@ -82,9 +96,9 @@ void veridoc_pf_build(
     veridoc_pf_setup_output_folder(config);
 
     // Next, export the file list as a JSON document.
-    char * json_file = calloc(strlen(config -> v_output) + 15, sizeof(char));
+    char * json_file = calloc(strlen(config -> v_output) + 16, sizeof(char));
     strcat(json_file, config -> v_output);
-    strcat(json_file, "file_list.json");
+    strcat(json_file, "/file_list.json");
     veridoc_pf_export_file_list_json(manifest,json_file);
     free(json_file);
 }
