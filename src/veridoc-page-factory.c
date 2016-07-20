@@ -87,6 +87,50 @@ void veridoc_pf_export_file_list_json(
 
 
 /*!
+@brief Responsible for emitting the list of modules for the project.
+*/
+void veridoc_pf_export_module_list_json(
+    verilog_source_tree * source,
+    char                * destination
+){
+    FILE * fh = fopen(destination, "w");
+    if(!(fh)){
+        printf("ERROR: Could not open json file for writing: %s\n",
+            destination);
+        return;
+    }
+
+    fprintf(fh, "var veridocModuleList = {");
+
+    fprintf(fh,"\"listType\":\"module-manifest\",");
+    fprintf(fh,"\"listTitle\":\"List Of Documented Modules\",");
+    fprintf(fh,"\"listNotes\":\"This is a list of all hardware modules documented.\",");
+    fprintf(fh,"\"listData\":[");
+
+    int m;
+    for(m = 0; m < source -> modules -> items; m++)
+    {
+        fprintf(fh,"{");
+        
+        ast_module_declaration * module = ast_list_get(source -> modules,m);
+
+        char * identifier = ast_identifier_tostring(module -> identifier);
+        
+        fprintf(fh,"\"id\":\"%s\"",identifier);
+        free(identifier);
+
+        fprintf(fh,"}");
+        if(m < source -> modules -> items -1){
+            fprintf(fh,",");
+        }
+    }
+
+    fprintf(fh, "]}");
+    fclose(fh);
+}
+
+
+/*!
 @brief Top level function for exporting the whole parsed data set to html.
 @param [in] manifest - The list of files parsed.
 @param [in] config - Configuration options for the output.
@@ -106,4 +150,11 @@ void veridoc_pf_build(
     strcat(json_file, "/file_list.js");
     veridoc_pf_export_file_list_json(manifest,json_file);
     free(json_file);
+    
+    // Next, export the module list as a JSON document.
+    char * module_file = calloc(strlen(config -> v_output) + 17, sizeof(char));
+    strcat(module_file, config -> v_output);
+    strcat(module_file, "/module_list.js");
+    veridoc_pf_export_module_list_json(source,module_file);
+    free(module_file);
 }

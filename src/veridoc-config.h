@@ -20,6 +20,7 @@ typedef struct veridoc_config_t{
     char * v_version;   //!< Version Number
     char * v_manifest;  //!< File manifest path.
     char * v_output;    //!< Folder to put the results in.
+    char * v_top_module; //!< The root module of the hierarchy.
 
 } veridoc_config;
 

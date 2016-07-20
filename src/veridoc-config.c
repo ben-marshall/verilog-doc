@@ -69,7 +69,7 @@ veridoc_config * veridoc_config_parse(
                 tr -> v_author = value;
                 value = calloc(1023,sizeof(char));
             }
-            else if(strcmp(key,"output") == 0 && !tr -> v_author)
+            else if(strcmp(key,"output") == 0 && !tr -> v_output)
             {
                 tr -> v_output= value;
                 value = calloc(1023,sizeof(char));
@@ -80,6 +80,11 @@ veridoc_config * veridoc_config_parse(
                 value = calloc(1023,sizeof(char));
             }
             else if(strcmp(key,"manifest") == 0 && !tr -> v_manifest)
+            {
+                tr -> v_manifest = value;
+                value = calloc(1023,sizeof(char));
+            }
+            else if(strcmp(key,"top_module") == 0 && !tr -> v_top_module)
             {
                 tr -> v_manifest = value;
                 value = calloc(1023,sizeof(char));
