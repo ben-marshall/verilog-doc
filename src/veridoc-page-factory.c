@@ -172,7 +172,11 @@ void veridoc_pf_export_hierarchy_json_r(
         {
             fprintf(fh,"[]");
         }
-        fprintf(fh,"}");
+        fprintf(fh,"}\n");
+        if(c!=children -> items-1)
+        {
+            fprintf(fh,",");
+        }
     }
     
     fprintf(fh,"]");
