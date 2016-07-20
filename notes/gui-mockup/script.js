@@ -66,17 +66,19 @@ function veridoc_render_module_list(
 
 function veridoc_render_module_hierarchy(
     rootModule,
-    container
+    container,
+    depth
 ){
-    container.innerHTML += "<li>"+rootModule.id +"<ul class='indented'>";
+    container.innerHTML += "<li style=\"padding-left:"+(5+depth)+"px;\">"+
+        rootModule.id;
 
     var i;
     for(i = 0; i < rootModule.children.length; i++)
     {
-        container.innerHTML += "<li>"+rootModule.children[i].id+"</li>";
+        veridoc_render_module_hierarchy(rootModule.children[i],container,
+            depth+50);
     }
 
-    container.innerHTML += "</ul>";
     container.innerHTML += "</li>";
 }
 
@@ -104,7 +106,7 @@ function veridoc_render_list(
     } else if (listType == "module-manifest") {
         veridoc_render_module_list(listData, container);  
     } else if (listType == "module-hierarchy") {
-        veridoc_render_module_hierarchy(listData[0], container);  
+        veridoc_render_module_hierarchy(listData[0], container,0);  
     } else {
         container.innerText = "Error: unknown list type: "+listType;
     }
