@@ -47,6 +47,11 @@ ul.navbar-h li a{
     text-decoration: none;
 }
 
+ul.navbar-h li a.active{
+    background-color: #EEEEEE;
+    color: #222222;
+}
+
 ul.navbar-h li a:hover{
     background-color: white;
     color: #222222;

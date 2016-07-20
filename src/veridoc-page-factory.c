@@ -116,8 +116,11 @@ void veridoc_pf_export_module_list_json(
 
         char * identifier = ast_identifier_tostring(module -> identifier);
         
-        fprintf(fh,"\"id\":\"%s\"",identifier);
+        fprintf(fh,"\"id\":\"%s\",",identifier);
         free(identifier);
+
+        fprintf(fh,"\"brief\":\"None\"");
+
 
         fprintf(fh,"}");
         if(m < source -> modules -> items -1){
