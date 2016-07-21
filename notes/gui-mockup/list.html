@@ -33,6 +33,7 @@ function on_page_loaded(){
     } else if(list == "hierarchy") {
         veridoc_render_list(veridocModuleHierarchy);
         document.getElementById("nav_hier").className += " active";
+        document.getElementById("list-container").className = "page-hier";
     }
 }
 
@@ -40,14 +41,14 @@ function on_page_loaded(){
 
 <style type="text/css">
 
-.page-list ul{
+.list-container {
     list-style-type: none;
     margin-top: 10px;
     padding: 0px;
 }
 
 
-.page-list ul li{
+.list-container li{
     background-color: white;
     margin-bottom: 3px;
     padding: 7px;
@@ -57,11 +58,11 @@ function on_page_loaded(){
     border: 1px solid #E9E9E9;
 }
 
-.page-list ul li:hover{
+.list-container li:hover{
     background-color: #F0F0F0;
 }
 
-.page-list ul li div.status{
+.list-container li div.status{
     border-radius: 5px;
     border: 1px solid grey;
     color: #444444;
@@ -75,15 +76,15 @@ function on_page_loaded(){
     vertical-align: middle;
 }
 
-.page-list ul li div.good{
+.list-container li div.good{
     background-color: #39aa56;
 }
 
-.page-list ul li div.bad{
+.list-container li div.bad{
     background-color: #ffb8b2;
 }
 
-.page-list ul li div.item{
+.list-container li div.item{
     margin: 3px;
     margin-left: 15px;
     font-family: monospace;
@@ -94,6 +95,35 @@ function on_page_loaded(){
 
 .indented{
     margin-left: 5px;
+}
+
+.page-hier{
+    list-style-type: none;
+    padding-left: 5px;
+    background-color: #909090;
+}
+
+.page-hier :first-child{
+        margin-left: 0px;
+}
+
+.page-hier div:hover{
+    background-color: rgba(255,255,255,0.2);
+}
+
+.page-hier div{
+    font-family: monospace;
+    font-style: normal;
+    font-variant: normal;
+    font-size: 11pt;
+    background-color: rgba(255,255,255,0.1);
+    padding: 3px;
+    margin: 3px;
+    margin-left: 40px;
+}
+
+.page-hier div span{
+    font-weight: bold;
 }
 
 </style>
@@ -124,11 +154,8 @@ function on_page_loaded(){
 List Description
 </p>
 <hr/>
-
-<div class="page-list">
-<ul id=list-container>
+<ul id="list-container" class="list-container">
 </ul>
-</div>
 
 </div>
 

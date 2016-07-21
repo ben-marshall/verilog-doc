@@ -66,20 +66,25 @@ function veridoc_render_module_list(
 
 function veridoc_render_module_hierarchy(
     rootModule,
-    container,
-    depth
+    container
 ){
-    container.innerHTML += "<li style=\"padding-left:"+(5+depth)+"px;\">"+
-        rootModule.id;
+    var tr = "<div>"+
+        "<span>"+rootModule.id+"</span>";
 
     var i;
+
+    rootModule.children = rootModule.children.sort(function(a,b){
+        if(a.id>=b.id){return 1;}
+        else {return -1;}
+    });
+
     for(i = 0; i < rootModule.children.length; i++)
     {
-        veridoc_render_module_hierarchy(rootModule.children[i],container,
-            depth+50);
+        tr +=veridoc_render_module_hierarchy(rootModule.children[i],container);
     }
 
-    container.innerHTML += "</li>";
+    tr += "</div>";
+    return tr;
 }
 
 /*
@@ -106,7 +111,8 @@ function veridoc_render_list(
     } else if (listType == "module-manifest") {
         veridoc_render_module_list(listData, container);  
     } else if (listType == "module-hierarchy") {
-        veridoc_render_module_hierarchy(listData[0], container,0);  
+        container.innerHTML +=
+            veridoc_render_module_hierarchy(listData[0], container);  
     } else {
         container.innerText = "Error: unknown list type: "+listType;
     }
