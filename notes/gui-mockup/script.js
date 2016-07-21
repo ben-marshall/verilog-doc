@@ -56,7 +56,8 @@ function veridoc_render_module_list(
         var item = listData[i];
         
         toset += "<li>";
-        toset += "<div class='item'>"+item.id+"</div>";
+        toset += "<div class='item'><a href='module.html?m="+item.id+"'>"+
+                 item.id+"</a></div>";
         toset += "</li>"
 
     }
@@ -69,7 +70,7 @@ function veridoc_render_module_hierarchy(
     container
 ){
     var tr = "<div>"+
-        "<span>"+rootModule.id+"</span>";
+        "<a href='module.html?m="+rootModule.id+"'>"+rootModule.id+"</a>";
 
     var i;
 
