@@ -259,6 +259,64 @@ char * veridoc_pf_module_filename(
 }
 
 /*!
+@brief Function responsible for emitting module port lists as JSON.
+@param [in] fh - File to write the JSON to.
+@param [in] config - The current veridoc config.
+@param [in] module - The module who's ports we are documenting.
+@todo Export the bit width of the variables properly. Requires work to the
+underlying verilog-parser library.
+*/
+void veridoc_pf_export_module_ports_json(
+    FILE                   * fh,
+    veridoc_config         * config,
+    ast_module_declaration * module
+){
+    if(module -> module_ports == NULL) {return;}
+
+    int i;  // Iterator variable.
+    json_begin_list(fh, "ports");
+    for(i = 0; i < module -> module_ports -> items; i++)
+    {
+        ast_port_declaration * port = ast_list_get(module -> module_ports, i);
+        if(port == NULL) {continue;}
+        if(port -> port_names == NULL) {continue;}
+        ast_identifier         id   = ast_list_get(port -> port_names,0);
+        if(id == NULL){continue;}
+        char                * idstr = ast_identifier_tostring(id);
+
+        char * p_type;
+        char * p_dir;
+        char * p_range = "? : ?";
+
+        if(port -> is_reg) p_type = "reg";
+        else if(port -> is_variable) p_type = "var";
+        else p_type = "wire";
+
+        switch(port -> direction){
+            case PORT_INPUT:
+                p_dir = "Input"; break;
+            case PORT_INOUT:
+                p_dir = "Inout"; break;
+            case PORT_OUTPUT:
+                p_dir = "Output"; break;
+            default:
+                p_dir = "Unknown"; break;
+        }
+        
+        fprintf(fh,"{");
+        json_emit_str(fh,"name",idstr); json_sepp(fh);
+        json_emit_str(fh,"type",p_type); json_sepp(fh);
+        json_emit_str(fh,"range",p_range); json_sepp(fh);
+        json_emit_str(fh,"direction",p_dir); json_sepp(fh);
+        fprintf(fh,"}");
+        
+        free(idstr);
+        if(i < module -> module_ports -> items - 1) json_sepp(fh);
+    }
+    json_end_list(fh); json_sepp(fh);
+}
+
+/*!
 @brief Function responsible for exporting information on a module as JSON.
 @param [in] config - The veridoc config being adhered to.
 @param [in] module - The module to document.
@@ -284,10 +342,35 @@ void veridoc_pf_export_module_json(
     json_emit_int(fh,"moduleLine" , module->meta.line); json_sepp(fh);
     json_emit_str(fh,"moduleBrief", "None"); json_sepp(fh);
 
-    json_begin_list(fh, "params");
+    json_begin_list(fh,"children");
+    int i;
+    if(module -> module_instantiations)
+    {
+        for(i=0; i < module -> module_instantiations -> items; i++)
+        {
+            ast_module_instantiation * inst = 
+                ast_list_get(module->module_instantiations,i);
+            if(inst == NULL){continue;}
+
+            char * id;
+            if(inst -> resolved)
+            {
+                id = ast_identifier_tostring(inst->declaration -> identifier);
+            }
+            else
+            {
+                id = ast_identifier_tostring(inst->module_identifer);
+            }
+            fprintf(fh,"\"%s\"",id);
+            if(i < module -> module_instantiations->items-1){fprintf(fh,",");}
+            free(id);
+        }
+    }
     json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "ports");
+
+    veridoc_pf_export_module_ports_json(fh,config,module);
+
+    json_begin_list(fh, "params");
     json_end_list(fh); json_sepp(fh);
     
     json_begin_list(fh, "instantiations");

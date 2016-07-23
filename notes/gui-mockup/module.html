@@ -20,6 +20,43 @@
         
     }
     </script>
+
+    <style type="text/css">
+        .monospace{
+            font-family: monospace;
+        }
+        
+        .codeify{
+            background-color: rgba(100,100,100,0.5);
+        }
+        
+        .page-section-content table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .page-section-content table thead tr {
+            border-bottom: 3px solid orange;
+        }
+        .page-section-content table thead tr td{
+            font-weight: bold;
+            padding: 5px;
+        }
+        .page-section-content table tr {
+            background-color: #FEFEFE;
+        }
+        .page-section-content table tr:nth-child(even) {
+            background-color: #EEEEEE;
+        }
+        .page-section-content table tr td{
+            font-weight: normal;
+            padding: 5px;
+        }
+        .page-section-content table tr:hover {
+            background-color: #DDDDDD;
+        }
+
+    </style>
+
 </head>
 <body onload="on_page_loaded();">
     
@@ -43,17 +80,15 @@
 <ul>
     <li><a href="">Parent Modules</a></li> 
     <ul>
-    <li><a class="active" href="">Current Module</a></li> 
-    <ul>
-    <li><a href="">Child 1</a></li> 
-    <li><a href="">Child 2</a></li> 
+    <li><a class="active" id="hier-current" href="">Current Module</a></li> 
+    <ul id="child-list">
     </ul>
 </ul>
 </div>
 
-<div class="page-content">
+<div id="page-content" class="page-content">
 
-<h1 id="module-title">Module Title</h1>
+<h1 class="monospace" id="module-title">Module Title</h1>
 
 <hr/>
 <p>
@@ -64,46 +99,6 @@
 <b>Description: </b><span id="module-description"></span>
 </p>
 <hr/>
-
-<div class="page-section">
-<div class="page-section-title">Module Parameters</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Module Ports</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Internal Signals</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Internal Variables</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Initial Blocks</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Sequential Blocks</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Instantiated Modules</div>
-<div class="page-section-content">Section Content</div>
-</div>
-
-<div class="page-section">
-<div class="page-section-title">Tasks and Functions</div>
-<div class="page-section-content">Section Content</div>
-</div>
 
 </div>
 
