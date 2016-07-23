@@ -15,10 +15,19 @@ a file stream.
 /*!
 @brief Emits a single JSON encoded key/value pair to the supplied file handle.
 */
-void json_emit_pair(
+void json_emit_str(
     FILE * fh,
     char * key,
     char * value
+);
+
+/*!
+@brief Emits a single JSON encoded key/value pair to the supplied file handle.
+*/
+void json_emit_int(
+    FILE * fh,
+    char * key,
+    int    value
 );
 
 

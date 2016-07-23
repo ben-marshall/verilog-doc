@@ -59,11 +59,11 @@ void veridoc_pf_export_file_list_json(
 
     fprintf(fh, "var veridocFileList = {");
 
-    json_emit_pair(fh,"listType","file-manifest");
+    json_emit_str(fh,"listType","file-manifest");
     json_sepp(fh);
-    json_emit_pair(fh,"listTitle","List of documented files.");
+    json_emit_str(fh,"listTitle","List of documented files.");
     json_sepp(fh);
-    json_emit_pair(fh,"listNotes","This is the list of all files specified as input to Veridoc, along with their parse status.");
+    json_emit_str(fh,"listNotes","This is the list of all files specified as input to Veridoc, along with their parse status.");
     json_sepp(fh);
     json_begin_list(fh,"listData");
 
@@ -74,10 +74,11 @@ void veridoc_pf_export_file_list_json(
 
         veridoc_manifest_file file = manifest -> files[f];
 
-        json_emit_pair(fh,"path",file.path);
+        json_emit_str(fh,"path",file.path);
         json_sepp(fh);
-        fprintf(fh,"\"parsed\":\"%d\",", file.parsed);
-        fprintf(fh,"\"success\":\"%d\"", file.parse_success);
+        json_emit_int(fh,"parsed",file.parsed);
+        json_sepp(fh);
+        json_emit_int(fh,"success",file.parse_success);
 
         fprintf(fh,"}");
         if(f < manifest -> file_count -1){
@@ -85,7 +86,8 @@ void veridoc_pf_export_file_list_json(
         }
     }
 
-    fprintf(fh, "]}");
+    json_end_list(fh);
+    fprintf(fh,"};");
     fclose(fh);
 }
 
