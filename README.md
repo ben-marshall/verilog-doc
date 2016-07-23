@@ -8,6 +8,18 @@ using or abusing Doxygen to get there.
 
 ---
 
+ToDo List:
+
+- Module Page JSON Emission
+ - Nets
+ - Functions / Tasks
+ - Instantiations
+ - Processes / Blocks
+- Module Page JSON Rendering
+- HTML "Distribution" creation
+
+---
+
 ### Main Sections:
 
 - Home Page

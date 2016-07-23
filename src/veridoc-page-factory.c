@@ -229,6 +229,19 @@ void veridoc_pf_export_hierarchy_json(
     fclose(fh);
 }
 
+/*!
+@brief Function responsible for exporting information on a module as JSON.
+@param [in] config - The veridoc config being adhered to.
+@param [in] module - The module to document.
+*/
+void veridoc_pf_export_module_json(
+    veridoc_config         * config,
+    ast_module_declaration * module
+){
+
+
+}
+
 
 /*!
 @brief Top level function for exporting the whole parsed data set to html.
@@ -268,4 +281,18 @@ void veridoc_pf_build(
         module_hier);
     printf("Module Hierarchy:   %s\n", module_hier);
     free(module_hier);
+
+
+    // Next, export the individual module pages.
+    printf("Exporting Module Documentation: ");
+    int m;
+    for(m = 0; m < source -> modules -> items; m++)
+    {
+        ast_module_declaration * module = ast_list_get(source->modules, m);
+
+        printf(".");
+
+        veridoc_pf_export_module_json(config, module);
+    }
+    printf("\n");
 }
