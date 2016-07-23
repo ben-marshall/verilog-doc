@@ -282,9 +282,37 @@ void veridoc_pf_export_module_json(
     json_emit_str(fh,"moduleName" , module_id); json_sepp(fh);
     json_emit_str(fh,"moduleFile" , "Unknown"); json_sepp(fh);
     json_emit_int(fh,"moduleLine" , module->meta.line); json_sepp(fh);
-    json_emit_str(fh,"moduleBrief", "None");
-    fprintf(fh,"};");
+    json_emit_str(fh,"moduleBrief", "None"); json_sepp(fh);
 
+    json_begin_list(fh, "params");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "ports");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "instantiations");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "nets");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "tasks");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "functions");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "variables");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "initials");
+    json_end_list(fh); json_sepp(fh);
+    
+    json_begin_list(fh, "processes");
+    json_end_list(fh);
+
+
+    fprintf(fh,"};");
     fprintf(fh,"\n\nveridoc_render_module();\n");
 
     free(module_id);
