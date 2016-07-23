@@ -9,6 +9,7 @@ documentation pages.
 #include <string.h>
 #include <assert.h>
 
+#include "veridoc-json.h"
 #include "veridoc-types.h"
 #include "veridoc-config.h"
 #include "veridoc-manifest.h"

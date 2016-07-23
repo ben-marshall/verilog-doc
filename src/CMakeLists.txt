@@ -10,7 +10,8 @@ set(VERIDOC_EXE veridoc)
 set(VERIDOC_CORE_SRC veridoc-config.c 
                      veridoc-parsing.c
                      veridoc-manifest.c
-                     veridoc-page-factory.c)
+                     veridoc-page-factory.c
+                     veridoc-json.c)
 
 set(VERIDOC_CORE     veridoccore)
 
