@@ -14,7 +14,7 @@ void json_emit_str(
     char * key,
     char * value
 ){
-    fprintf(fh,"\"%s\":\"%s\"\n",key,value);
+    fprintf(fh,"\"%s\":\"%s\"",key,value);
 }
 
 /*!
@@ -25,7 +25,7 @@ void json_emit_int(
     char * key,
     int    value
 ){
-    fprintf(fh,"\"%s\":\"%d\"\n",key,value);
+    fprintf(fh,"\"%s\":\"%d\"",key,value);
 }
 
 
@@ -54,5 +54,5 @@ void json_end_list(
 void json_sepp(
     FILE * fh
 ){
-    fprintf(fh,",");
+    fprintf(fh,",\n");
 }

@@ -131,3 +131,22 @@ function veridoc_render_list(
         container.innerText = "Error: unknown list type: "+listType;
     }
 }
+
+
+/*!
+Responsible for rendering a module page from it's JSON attributes.
+*/
+function veridoc_render_module(){
+    var module = gup("m", location.href);
+    
+    var data     = veridocModuleInformation;
+    var docTitle = document.getElementById("module-title");
+    var docLine  = document.getElementById("module-line");
+    var docFile  = document.getElementById("source-file");
+    var docBrief = document.getElementById("module-description");
+
+    docTitle.innerText = data.moduleName;
+    docLine.innerText  = data.moduleLine;
+    docFile.innerText  = data.moduleFile;
+    docBrief.innerText = data.moduleBrief;
+}

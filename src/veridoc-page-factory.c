@@ -108,10 +108,13 @@ void veridoc_pf_export_module_list_json(
 
     fprintf(fh, "var veridocModuleList = {");
 
-    fprintf(fh,"\"listType\":\"module-manifest\",");
-    fprintf(fh,"\"listTitle\":\"List Of Documented Modules\",");
-    fprintf(fh,"\"listNotes\":\"This is a list of all hardware modules documented.\",");
-    fprintf(fh,"\"listData\":[");
+    json_emit_str(fh,"listType" ,"module-manifest");
+    json_sepp(fh);
+    json_emit_str(fh,"listTitle","List Of Documented Modules");
+    json_sepp(fh);
+    json_emit_str(fh,"listNotes","This is a list of all hardware modules documented.");
+    json_sepp(fh);
+    json_begin_list(fh,"listData");
 
     int m;
     for(m = 0; m < source -> modules -> items; m++)
@@ -122,19 +125,20 @@ void veridoc_pf_export_module_list_json(
 
         char * identifier = ast_identifier_tostring(module -> identifier);
         
-        fprintf(fh,"\"id\":\"%s\",",identifier);
+        json_emit_str(fh,"id",identifier);
         free(identifier);
-
-        fprintf(fh,"\"brief\":\"None\"");
+        json_sepp(fh);
+        json_emit_str(fh,"brief","None");
 
 
         fprintf(fh,"}");
-        if(m < source -> modules -> items -1){
-            fprintf(fh,",");
+        if(m < source -> modules -> items - 1){
+            json_sepp(fh);
         }
     }
-
-    fprintf(fh, "]}");
+    
+    json_end_list(fh);
+    fprintf(fh, "};");
     fclose(fh);
 }
 
@@ -235,6 +239,25 @@ void veridoc_pf_export_hierarchy_json(
     fclose(fh);
 }
 
+char * veridoc_pf_module_filename(
+    veridoc_config         * config,
+    ast_module_declaration * module
+){
+    char * file_name;
+    char * module_id = ast_identifier_tostring(module -> identifier);
+    
+    size_t len = strlen(module_id) + strlen(config -> v_output) + 14;
+
+    file_name = calloc(len, sizeof(char));
+    strcat(file_name, config -> v_output);
+    strcat(file_name, "/module_");
+    strcat(file_name, module_id);
+    strcat(file_name, ".json");
+
+    free(module_id);
+    return file_name;
+}
+
 /*!
 @brief Function responsible for exporting information on a module as JSON.
 @param [in] config - The veridoc config being adhered to.
@@ -244,8 +267,28 @@ void veridoc_pf_export_module_json(
     veridoc_config         * config,
     ast_module_declaration * module
 ){
+    char * module_id = ast_identifier_tostring(module -> identifier);
+    char * file_name = veridoc_pf_module_filename(config,module);
 
+    FILE * fh = fopen(file_name, "w");
+    if(!(fh)){
+        printf("ERROR: Could not open json file for writing: %s\n",file_name);
+        free(module_id);
+        free(file_name);
+        return;
+    }
+    
+    fprintf(fh, "var veridocModuleInformation= {");
+    json_emit_str(fh,"moduleName" , module_id); json_sepp(fh);
+    json_emit_str(fh,"moduleFile" , "Unknown"); json_sepp(fh);
+    json_emit_int(fh,"moduleLine" , module->meta.line); json_sepp(fh);
+    json_emit_str(fh,"moduleBrief", "None");
+    fprintf(fh,"};");
 
+    fprintf(fh,"\n\nveridoc_render_module();\n");
+
+    free(module_id);
+    free(file_name);
 }
 
 
@@ -295,9 +338,6 @@ void veridoc_pf_build(
     for(m = 0; m < source -> modules -> items; m++)
     {
         ast_module_declaration * module = ast_list_get(source->modules, m);
-
-        printf(".");
-
         veridoc_pf_export_module_json(config, module);
     }
     printf("\n");

@@ -3,17 +3,24 @@
 <head>
     <title>Verilog Doc</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="./style.css"/>
-</head>
-
-<script type="text/javascript">
-function on_page_loaded(){
     
-    var module = gup("m", location.href);
+    <link rel="stylesheet" type="text/css" href="./style.css"/>
+    <script src="script.js" type="text/javascript"></script>
 
+    <script type="text/javascript">
+    function on_page_loaded(){
+        
+        var module = gup("m", location.href);
+        var datafile = "../../build/veridoc-out/module_"+module+".json";
 
-}
-</script>
+        var fileref=document.createElement('script')
+        fileref.setAttribute("type","text/javascript")
+        fileref.setAttribute("src", datafile)
+        document.getElementsByTagName("head")[0].appendChild(fileref)
+        
+    }
+    </script>
+</head>
 <body onload="on_page_loaded();">
     
 <div class="header">
@@ -30,7 +37,7 @@ function on_page_loaded(){
 <br/>
 <br/>
 
-<div class="left-divider">a</div>
+<div class="left-divider">&nbsp;&nbsp;</div>
 
 <div class="module-list">
 <ul>
@@ -46,11 +53,15 @@ function on_page_loaded(){
 
 <div class="page-content">
 
-<h1>Module Title</h1>
+<h1 id="module-title">Module Title</h1>
 
 <hr/>
 <p>
-Module Description
+<b>Source: </b>Defined on line <span id="module-line"></span> of
+<span id="source-file"></span>
+</p>
+<p>
+<b>Description: </b><span id="module-description"></span>
 </p>
 <hr/>
 
