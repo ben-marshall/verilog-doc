@@ -16,6 +16,19 @@ body{
     right:0px;
 }
 
+.work-in-progress{
+    position: fixed;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(255,100,100,0.8);;
+    font-color: white;
+    font-weight: bold;
+    padding: 7px;
+    text-align: center;
+    border-top: 1px solid grey;
+}
+
 .navbar-h{
     list-style-type: none;
     margin: 0px;
