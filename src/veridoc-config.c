@@ -8,10 +8,12 @@
 /*!
 @brief Parses and returns the config file at the supplied path.
 @param [in] config_file_path
+@param [in] exe_path - the value of argv[0]
 @returns A pointer to the supplied config structure.
 */
 veridoc_config * veridoc_config_parse(
-    char * config_file_path
+    char * config_file_path,
+    char * exe_path
 ){
 
     veridoc_config * tr = calloc(1,sizeof(veridoc_config));
@@ -79,6 +81,11 @@ veridoc_config * veridoc_config_parse(
                 tr -> v_version= value;
                 value = calloc(1023,sizeof(char));
             }
+            else if(strcmp(key,"assets_dir") == 0 && !tr -> v_assets_dir)
+            {
+                tr -> v_assets_dir = value;
+                value = calloc(1023,sizeof(char));
+            }
             else if(strcmp(key,"manifest") == 0 && !tr -> v_manifest)
             {
                 tr -> v_manifest = value;
@@ -100,6 +107,29 @@ veridoc_config * veridoc_config_parse(
         }
     }
 
+    // Make sure we have a proper assets source path.
+    if(tr -> v_assets_dir == NULL)
+    {
+        tr -> v_assets_dir = strdup(exe_path);
+        size_t length = strlen(tr -> v_assets_dir);
+        while(length > 0)
+        {
+            if(tr -> v_assets_dir[length] == '\\' || 
+               tr -> v_assets_dir[length] == '/')
+            {
+                break;
+            }
+            else
+            {
+                tr -> v_assets_dir[length] = '\0';
+                length = length - 1;
+            }
+        }
+        tr -> v_assets_dir = realloc(tr -> v_assets_dir,length+7);
+        strcat(tr -> v_assets_dir, "assets/");
+    }
+
+    // Make sure we have a proper output path.
     if(tr -> v_output == NULL)
     {
         tr -> v_output = calloc(15,sizeof(char));

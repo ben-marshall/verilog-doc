@@ -21,18 +21,20 @@ typedef struct veridoc_config_t{
     char * v_manifest;  //!< File manifest path.
     char * v_output;    //!< Folder to put the results in.
     char * v_top_module; //!< The root module of the hierarchy.
-
+    char * v_assets_dir; //!< Where to look for template files.
 } veridoc_config;
 
 
 /*!
 @brief Parses and returns the config file at the supplied path.
 @param [in] config_file_path
+@param [in] exe_path - the value of argv[0]
 @returns A pointer to the supplied config structure or NULL if the file cannot
 be opened or parsed.
 */
 veridoc_config * veridoc_config_parse(
-    char * config_file_path
+    char * config_file_path,
+    char * exe_path
 );
 
 /*!

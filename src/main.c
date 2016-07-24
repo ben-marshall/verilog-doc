@@ -75,7 +75,10 @@ int main(int argc, char ** argv)
         print_help(BOOL_TRUE);
     }
     
-    veridoc_config * config = veridoc_config_parse(args -> config_path);
+    veridoc_config * config = veridoc_config_parse(
+        args -> config_path,
+        argv[0]
+    );
     
     // Check the config file was laoded correctly.
     if(!config){
@@ -109,11 +112,13 @@ int main(int argc, char ** argv)
     
     // Print out some status information.
     if(args -> verbose){
+        printf("Exe Path:      %s\n", argv[0]);
         printf("Config Path:   %s\n", args -> config_path);
         printf("File Manifest: %s\n", config -> v_manifest);
         printf("Project:       %s\n", config -> v_project);
         printf("Author:        %s\n", config -> v_author );
         printf("Version:       %s\n", config -> v_version);
+        printf("Assets Path:   %s\n", config -> v_assets_dir);
         printf("Input Files:   %d\n", manifest -> file_count);
         printf("Output To:     %s\n", config-> v_output);
         printf("\n");

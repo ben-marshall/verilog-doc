@@ -21,6 +21,7 @@ marks are needed. An example file might look like this:
     manifest   = /work/riscv/core/design/manifest.txt
     output     = ./veridoc-out/
     top_module = sparc
+    assets_dir = ./assets/
 
 
 Comments can be added by making the *first* character of a line a hash "#".
