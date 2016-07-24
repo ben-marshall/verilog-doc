@@ -132,8 +132,8 @@ veridoc_config * veridoc_config_parse(
     // Make sure we have a proper output path.
     if(tr -> v_output == NULL)
     {
-        tr -> v_output = calloc(15,sizeof(char));
-        strcat(tr -> v_output, "./veridoc-out");
+        tr -> v_output = calloc(16,sizeof(char));
+        strcat(tr -> v_output, "./veridoc-out/");
     }
 
     free(key);

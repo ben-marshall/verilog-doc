@@ -16,6 +16,58 @@ documentation pages.
 #include "veridoc-page-factory.h"
 
 /*!
+@brief Responsible for copying all template asset files to the output folder.
+*/
+void veridoc_pf_copy_assets(
+    veridoc_config      * config
+){
+    char * to_copy[4];
+    to_copy[0] = "/module.html";
+    to_copy[1] = "/list.html";
+    to_copy[2] = "/script.js";
+    to_copy[3] = "/style.css";
+
+    size_t src_len = strlen(config -> v_assets_dir);
+    size_t tgt_len = strlen(config -> v_output);
+
+    int i = 0;
+    for(i = 0; i < 4; i++)
+    {
+        char * src_path = calloc(src_len + strlen(to_copy[i])+1,sizeof(char));
+        strcat(src_path, config -> v_assets_dir);
+        strcat(src_path, to_copy[i]);
+        char * tgt_path = calloc(tgt_len + strlen(to_copy[i])+1,sizeof(char));
+        strcat(tgt_path, config -> v_output);
+        strcat(tgt_path, to_copy[i]);
+
+        FILE * source = fopen(src_path,"r");
+        FILE * target = fopen(tgt_path,"w");
+
+        if(!source)
+        {
+            printf("ERROR: Could not source template file: '%s'\n", src_path);
+        }
+        else if(!target)
+        {
+            printf("ERROR: Could not open target file: '%s'\n", tgt_path);
+        }
+        else
+        {
+            printf("Copying '%s' -> '%s'\n", src_path, tgt_path);
+            char ch;
+            while((ch = fgetc(source)) != EOF){
+                fputc(ch,target);
+            }
+        }
+
+        free(src_path);
+        free(tgt_path);
+        fclose(source);
+        fclose(target);
+    }
+}
+
+/*!
 @brief Sets up the output folder.
 @returns True if all goes well, false otherwise.
 */

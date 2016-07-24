@@ -130,6 +130,9 @@ int main(int argc, char ** argv)
     
     // Build the output documentation.
     veridoc_pf_build(manifest, config, source);
+
+    // Copy the asset files from their source locations to the output dir.
+    veridoc_pf_copy_assets(config);
     
     // Free everything
     veridoc_config_free(config);

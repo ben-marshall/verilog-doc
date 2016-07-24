@@ -62,5 +62,12 @@ void veridoc_pf_build(
     verilog_source_tree * source
 );
 
+/*!
+@brief Responsible for copying all template asset files to the output folder.
+*/
+void veridoc_pf_copy_assets(
+    veridoc_config      * config
+);
+
 #endif
 
