@@ -1,0 +1,45 @@
+var veridocModuleInformation= {"moduleName":"clken_buf",
+"moduleFile":"Unknown",
+"moduleLine":"5769",
+"moduleBrief":"None",
+"children":[
+]
+,
+"ports":[
+{"name":"clk",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+},
+{"name":"rclk",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();

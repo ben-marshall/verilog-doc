@@ -1,0 +1,60 @@
+var veridocModuleInformation= {"moduleName":"mux2ds",
+"moduleFile":"Unknown",
+"moduleLine":"5587",
+"moduleBrief":"None",
+"children":[
+]
+,
+"ports":[
+{"name":"dout",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+},
+{"name":"in0",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"in1",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"sel0",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"sel1",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();

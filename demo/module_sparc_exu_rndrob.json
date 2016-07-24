@@ -1,0 +1,55 @@
+var veridocModuleInformation= {"moduleName":"sparc_exu_rndrob",
+"moduleFile":"Unknown",
+"moduleLine":"3655",
+"moduleBrief":"None",
+"children":[
+"dffr_s"]
+,
+"ports":[
+{"name":"clk",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"req_vec",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"advance",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"grant_vec",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();

@@ -1,0 +1,95 @@
+var veridocModuleInformation= {"moduleName":"sparc_exu_div_yreg",
+"moduleFile":"Unknown",
+"moduleLine":"1997",
+"moduleBrief":"None",
+"children":[
+"mux4ds","dff_s","mux4ds","mux4ds","mux4ds","mux4ds","dff_s","dff_s","dff_s","dff_s"]
+,
+"ports":[
+{"name":"clk",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"se",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"byp_div_yreg_data_w",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"mul_div_yreg_data_g",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_div_thr_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_div_yreg_wen_w",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_div_yreg_wen_g",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_div_yreg_wen_l",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_div_yreg_data_31_g",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_div_yreg_shift_g",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"yreg_mdq_y_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+},
+{"name":"div_ecl_yreg_0_l",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();

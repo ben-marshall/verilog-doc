@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Verilog Doc</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <link rel="stylesheet" type="text/css" href="./style.css"/>
+    <script src="script.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+    function on_page_loaded(){
+        
+        var module = gup("m", location.href);
+        var datafile = "module_"+module+".json";
+
+        var fileref=document.createElement('script')
+        fileref.setAttribute("type","text/javascript")
+        fileref.setAttribute("src", datafile)
+        document.getElementsByTagName("head")[0].appendChild(fileref)
+        
+    }
+    </script>
+
+    <style type="text/css">
+        .monospace{
+            font-family: monospace;
+        }
+        
+        .codeify{
+            background-color: rgba(100,100,100,0.5);
+        }
+        
+        .page-section-content table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .page-section-content table thead tr {
+            border-bottom: 3px solid orange;
+        }
+        .page-section-content table thead tr td{
+            font-weight: bold;
+            padding: 5px;
+        }
+        .page-section-content table tr {
+            background-color: #FEFEFE;
+        }
+        .page-section-content table tr:nth-child(even) {
+            background-color: #EEEEEE;
+        }
+        .page-section-content table tr td{
+            font-weight: normal;
+            padding: 5px;
+        }
+        .page-section-content table tr:hover {
+            background-color: #DDDDDD;
+        }
+
+    </style>
+
+</head>
+<body onload="on_page_loaded();">
+    
+<div class="header">
+<ul class="navbar-h">
+    <li>Project Documentation</li>
+    <li><a id="nav_home" href="">Home</a></li>
+    <li><a id="nav_files" href="list.html?l=files">File List</a></li>
+    <li><a id="nav_modules" href="list.html?l=modules">Module List A-Z</a></li>
+    <li><a id="nav_hier" href="list.html?l=hierarchy">Module Hierarchy</a></li>
+    <li><a target="_blank" href="https://github.com/ben-marshall/verilog-doc">Veridoc</a></li>
+</ul>
+</div>
+<br/>
+<br/>
+<br/>
+
+<div class="left-divider">&nbsp;&nbsp;</div>
+
+<div class="module-list">
+<ul>
+    <li><a href="">Parent Modules</a></li> 
+    <ul>
+    <li><a class="active" id="hier-current" href="">Current Module</a></li> 
+    <ul id="child-list">
+    </ul>
+</ul>
+</div>
+
+<div id="page-content" class="page-content">
+
+<h1 class="monospace" id="module-title">Module Title</h1>
+
+<hr/>
+<p>
+<b>Source: </b>Defined on line <span id="module-line"></span> of
+<span id="source-file"></span>
+</p>
+<p>
+<b>Description: </b><span id="module-description"></span>
+</p>
+<hr/>
+
+</div>
+
+<div class="work-in-progress">
+    Work In Progress
+</div>
+
+</body>
+</html>

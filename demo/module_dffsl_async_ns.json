@@ -1,0 +1,55 @@
+var veridocModuleInformation= {"moduleName":"dffsl_async_ns",
+"moduleFile":"Unknown",
+"moduleLine":"5814",
+"moduleBrief":"None",
+"children":[
+]
+,
+"ports":[
+{"name":"din",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"clk",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"set_l",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"q",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();

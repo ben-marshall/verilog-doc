@@ -1,0 +1,70 @@
+var veridocModuleInformation= {"moduleName":"dffe_s",
+"moduleFile":"Unknown",
+"moduleLine":"5253",
+"moduleBrief":"None",
+"children":[
+]
+,
+"ports":[
+{"name":"din",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"en",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"clk",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"q",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+},
+{"name":"se",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"si",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"so",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();

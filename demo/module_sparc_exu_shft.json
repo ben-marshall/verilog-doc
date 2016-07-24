@@ -1,0 +1,85 @@
+var veridocModuleInformation= {"moduleName":"sparc_exu_shft",
+"moduleFile":"Unknown",
+"moduleLine":"3820",
+"moduleBrief":"None",
+"children":[
+"dp_mux2es","dp_mux2es","mux4ds","mux4ds","mux4ds","dp_buffer","dp_buffer","dp_buffer","mux4ds","mux4ds","mux4ds","dp_buffer","dp_buffer","dp_buffer"]
+,
+"ports":[
+{"name":"ecl_shft_lshift_e_l",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_shft_op32_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_shft_shift4_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_shft_shift1_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"byp_alu_rs1_data_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"byp_alu_rs2_data_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_shft_enshift_e_l",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_shft_extendbit_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"ecl_shft_extend32bit_e_l",
+"type":"wire",
+"range":"? : ?",
+"direction":"Input",
+},
+{"name":"shft_alu_shift_out_e",
+"type":"wire",
+"range":"? : ?",
+"direction":"Output",
+}]
+,
+"params":[
+]
+,
+"instantiations":[
+]
+,
+"nets":[
+]
+,
+"tasks":[
+]
+,
+"functions":[
+]
+,
+"variables":[
+]
+,
+"initials":[
+]
+,
+"processes":[
+]
+};
+
+veridoc_render_module();
