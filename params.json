@@ -1,0 +1,6 @@
+{
+  "name": "Verilog-doc",
+  "tagline": "A basic documentation generator for Verilog, similar to Doxygen.",
+  "body": "\r\n# Verilog Doc\r\n\r\n[![Documentation](https://codedocs.xyz/ben-marshall/verilog-doc.svg)](https://codedocs.xyz/ben-marshall/verilog-doc/)\r\n![Licence: MIT](https://img.shields.io/badge/License-MIT-blue.svg)\r\n\r\n---\r\n\r\nThis project aims to provide a Doxygen-like tool for the Verilog Hardware\r\nDescription Language (HDL).\r\n\r\nIt is currently under heavy development, and in the early stages of\r\nconstruction. None the less, it can parse input source trees and spit out a\r\nmodule hierarchy and file list, as well as document a modules ports.\r\n\r\n---\r\n",
+  "note": "Don't delete this file! It's used internally to help with page regeneration."
+}
