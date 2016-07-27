@@ -5,27 +5,31 @@ A file of todo-lists, notes, and other useful stuff.
 
 ---
 
-ToDo List:
+## Todo List:
 
-- Module Page JSON Emission
- - Nets
- - Functions / Tasks
- - Instantiations
- - Processes / Blocks
-- Module Page JSON Rendering
-- HTML "Distribution" creation
+### Features
+
+- [ ] File name sourcing for each construct.
+- [ ] Module Page JSON Emission
+ - [ ] Nets
+ - [ ] Ports
+ - [ ] Parameters
+ - [ ] Functions / Tasks
+ - [ ] Instantiations
+ - [ ] Processes / Blocks
+- [X] Module Page JSON Rendering
+- [ ] HTML "Distribution" creation
+
+### Build / Flow
+
+- [ ] Coverage Checking
+- [ ] Travis Build Integration
+- [ ] Proper testing framework
+- [ ] Coveralls integration
 
 ---
 
-### Main Sections:
-
-- Home Page
-- File List
-- Module List
-- Module Hierarchy
- - Module Pages
-
-### Program Stages
+## Program Stages
 
 1. Load Command Line Arguments
 2. Load configuration file if any.
