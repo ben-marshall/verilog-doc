@@ -26,6 +26,7 @@ A file of todo-lists, notes, and other useful stuff.
 - [ ] Travis Build Integration
 - [ ] Proper testing framework
 - [ ] Coveralls integration
+- [ ] A top-level makefile for quick / easy access to stuff.
 
 ---
 
