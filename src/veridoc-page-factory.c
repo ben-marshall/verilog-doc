@@ -181,6 +181,8 @@ void veridoc_pf_export_module_list_json(
         free(identifier);
         json_sepp(fh);
         json_emit_str(fh,"brief","None");
+        json_sepp(fh);
+        json_emit_str(fh,"file",module -> meta.file);
 
 
         fprintf(fh,"}");
@@ -392,7 +394,7 @@ void veridoc_pf_export_module_json(
     
     fprintf(fh, "var veridocModuleInformation= {");
     json_emit_str(fh,"moduleName" , module_id); json_sepp(fh);
-    json_emit_str(fh,"moduleFile" , "Unknown"); json_sepp(fh);
+    json_emit_str(fh,"moduleFile" , module -> meta.file); json_sepp(fh);
     json_emit_int(fh,"moduleLine" , module->meta.line); json_sepp(fh);
     json_emit_str(fh,"moduleBrief", "None"); json_sepp(fh);
 
