@@ -10,6 +10,7 @@ A file of todo-lists, notes, and other useful stuff.
 ### Features
 
 - [ ] File name sourcing for each construct.
+- [ ] Better library for JSON emission.
 - [ ] Module Page JSON Emission
  - [ ] Nets
  - [ ] Ports
@@ -18,7 +19,7 @@ A file of todo-lists, notes, and other useful stuff.
  - [ ] Instantiations
  - [ ] Processes / Blocks
 - [X] Module Page JSON Rendering
-- [ ] HTML "Distribution" creation
+- [X] HTML "Distribution" creation
 
 ### Build / Flow
 
