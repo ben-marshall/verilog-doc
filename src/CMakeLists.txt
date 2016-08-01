@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.8)
 
 project(veridoc-src)
 
+set(DISABLE_VERILOG_PARSER_TESTS ON) # disable subdirectory tests.
 add_subdirectory(./verilog-parser)
 
 set(VERIDOC_SRC main.c)
@@ -15,14 +16,14 @@ set(VERIDOC_CORE_SRC veridoc-config.c
 
 set(VERIDOC_CORE     veridoccore)
 
-# ------------------------------------------------------------------------
+# ---------------------- Add build options -------------------------------
 
 option(VERIDOC_COVERAGE "If YES, build the debug executable with coverage." NO)
 
 SET(COV_FLAGS_C     "-fprofile-arcs -ftest-coverage")
 SET(COV_FLAGS_LINK  "-fprofile-arcs -ftest-coverage")
 
-# ------------------------------------------------------------------------
+# ---------------------- Set build flags ---------------------------------
     
 SET(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0 -Wall -W")
 SET(CMAKE_EXE_LINKER_FLAGS_DEBUG "${CMAKE_C_FLAGS_RELEASE}")
@@ -45,7 +46,7 @@ message(STATUS "Parser Link Flags Debug:   ${CMAKE_EXE_LINKER_FLAGS_DEBUG}")
 message(STATUS "Parser Build Flags Release: ${CMAKE_C_FLAGS_RELEASE}")
 message(STATUS "Parser Link Flags Release: ${CMAKE_EXE_LINKER_FLAGS_RELEASE}")
 
-# ------------------------------------------------------------------------
+# ---------------------- Add output libraries and files ------------------
 
 add_library(${VERIDOC_CORE} ${VERIDOC_CORE_SRC})
 
@@ -67,14 +68,23 @@ configure_file(assets/style.css   ${BIN_DIR_ASSETS}/style.css  )
 configure_file(assets/veridoc.cfg ${BIN_DIR_ASSETS}/veridoc.cfg  )
 configure_file(assets/test_manifest.txt ${BIN_DIR_ASSETS}/test_manifest.txt )
 
-# ------------------------------------------------------------------------
+# ---------------------- Add Tests ---------------------------------------
 
 if( ${VERIDOC_COVERAGE} )
 
     set(CMAKE_C_OUTPUT_EXTENSION_REPLACE 1)
 
+    add_test(NAME veridoc_coverage
+             COMMAND veridoc -c ./build/debug/bin/assets/veridoc.cfg -F ./build/debug/bin/assets/test_manifest.txt  -v
+             WORKING_DIRECTORY ../
+    )
+
 else ()
 
+    add_test(NAME veridoc_0
+             COMMAND veridoc -c ./build/debug/bin/assets/veridoc.cfg -F ./build/debug/bin/assets/test_manifest.txt  -v
+             WORKING_DIRECTORY ../
+    )
 
 endif()
 

@@ -14,10 +14,10 @@ docs:
 	$(MAKE) -C ./build/debug -B veridoc-docs
 
 debug:
-	$(MAKE) -C ./build/debug veridoc
+	$(MAKE) -C ./build/debug veridoc parser
 
 coverage:
-	$(MAKE) -C ./build/coverage veridoc
+	$(MAKE) -C ./build/coverage veridoc parser
 
 clean:
 	$(MAKE) -C ./build/coverage clean
@@ -34,7 +34,7 @@ test-coverage: coverage
 	$(MAKE) -C ./build/coverage test
 
 test-coverage-report: test-coverage
-	cd ./build/coverage/src/CMakeFiles/veridoc.dir/ ; \
+	cd ./build/coverage/src/CMakeFiles/veridoccore.dir/ ; \
 	gcov -abcf *.o  ; \
     lcov --directory . -c -o cov.info -t "veridoc" ; \
 	genhtml -o ../../../../cov-report -t "veridoc" --num-spaces 4 cov.info
