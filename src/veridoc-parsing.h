@@ -9,6 +9,7 @@
 
 #include "veridoc-types.h"
 #include "veridoc-manifest.h"
+#include "veridoc-config.h"
 
 #ifndef VERIDOC_PARSING_H
 #define VERIDOC_PARSING_H
@@ -20,7 +21,8 @@ internal source tree.
 @returns The parsed source tree object. 
 */
 verilog_source_tree * veridoc_parse_input_source(
-    veridoc_manifest * manifest
+    veridoc_manifest * manifest,
+    veridoc_config   * config
 );
 
 

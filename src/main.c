@@ -121,12 +121,20 @@ int main(int argc, char ** argv)
         printf("Assets Path:   %s\n", config -> v_assets_dir);
         printf("Input Files:   %d\n", manifest -> file_count);
         printf("Output To:     %s\n", config-> v_output);
+        printf("Include Paths:\n");
+
+        unsigned int i;
+        for(i = 0; i < config -> v_includes -> items; i++)
+        {
+            printf("\t'%s'\n", (char*)ast_list_get(config -> v_includes, i));
+        }
+
         printf("\n");
         printf("Starting parsing...\n");
     }
     
     // Read in all of the source files.
-    verilog_source_tree * source = veridoc_parse_input_source(manifest);
+    verilog_source_tree * source = veridoc_parse_input_source(manifest,config);
     
     // Build the output documentation.
     veridoc_pf_build(manifest, config, source);
@@ -137,6 +145,7 @@ int main(int argc, char ** argv)
     // Free everything
     veridoc_config_free(config);
     veridoc_manifest_free(manifest);
-
-return 0;
+    
+    printf("Veridoc Completed Successfully.\n");
+    return 0;
 }

@@ -13,7 +13,8 @@ verilog-parser library) and adds to its internal list of directories to
 search for include files.
 */
 void veridoc_parse_init_include_paths(
-    veridoc_manifest * manifest
+    veridoc_manifest * manifest,
+    veridoc_config   * config
 ){
     int d;
     // iterate over the directories
@@ -24,6 +25,16 @@ void veridoc_parse_init_include_paths(
             manifest -> directories[d].path);
         printf("Added '%s' to search path.\n", 
             manifest -> directories[d].path);
+    }
+    
+    // iterate over the paths in the config 
+    for(d = 0; d < config -> v_includes -> items ; d++)
+    {
+        // add to the search paths.
+        ast_list_append(yy_preproc -> search_dirs,
+            ast_list_get(config -> v_includes,d));
+        printf("Added '%s' to search path.\n", 
+            (char*)ast_list_get(config -> v_includes,d));
     }
 }
 
@@ -74,13 +85,14 @@ internal source tree.
 @returns The parsed source tree object. 
 */
 verilog_source_tree * veridoc_parse_input_source(
-    veridoc_manifest * manifest
+    veridoc_manifest * manifest,
+    veridoc_config   * config
 ){
     // First, we must initialise the parser library
     verilog_parser_init();
 
     // Next, we need to set up the include paths for the pre-processor.
-    veridoc_parse_init_include_paths(manifest);
+    veridoc_parse_init_include_paths(manifest,config);
 
     // Now we can do the parsing!
     veridoc_parse_manifest_files(manifest);

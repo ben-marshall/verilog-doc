@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "verilog-parser/src/verilog_ast_common.h"
+
 #ifndef VERIDOC_CONFIG_H
 #define VERIDOC_CONFIG_H
 
@@ -22,6 +24,7 @@ typedef struct veridoc_config_t{
     char * v_output;    //!< Folder to put the results in.
     char * v_top_module; //!< The root module of the hierarchy.
     char * v_assets_dir; //!< Where to look for template files.
+    ast_list * v_includes; //!< Include folders for header files.
 } veridoc_config;
 
 
@@ -40,7 +43,7 @@ veridoc_config * veridoc_config_parse(
 /*!
 @brief Frees the memory allocated to the supplied config file.
 */
-void * veridoc_config_free(
+void veridoc_config_free(
     veridoc_config * tofree
 );
 

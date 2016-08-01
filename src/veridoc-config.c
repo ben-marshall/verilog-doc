@@ -17,6 +17,8 @@ veridoc_config * veridoc_config_parse(
 ){
 
     veridoc_config * tr = calloc(1,sizeof(veridoc_config));
+    tr -> v_includes = ast_list_new();
+
     FILE * fh = fopen(config_file_path, "r");
 
     if(fh == NULL){
@@ -79,6 +81,11 @@ veridoc_config * veridoc_config_parse(
             else if(strcmp(key,"version") == 0 && !tr -> v_version)
             {
                 tr -> v_version= value;
+                value = calloc(1023,sizeof(char));
+            }
+            else if(strcmp(key,"include") == 0)
+            {
+                ast_list_append(tr -> v_includes, value);
                 value = calloc(1023,sizeof(char));
             }
             else if(strcmp(key,"assets_dir") == 0 && !tr -> v_assets_dir)
@@ -146,7 +153,7 @@ veridoc_config * veridoc_config_parse(
 /*!
 @brief Frees the memory allocated to the supplied config file.
 */
-void * veridoc_config_free(
+void veridoc_config_free(
     veridoc_config * tofree
 ){
     if(tofree -> v_project)
@@ -155,8 +162,6 @@ void * veridoc_config_free(
         free(tofree -> v_author  ); //!< Documentation Authors
     if(tofree -> v_version)
         free(tofree -> v_version ); //!< Version Number
-    if(tofree -> v_manifest)
-        free(tofree -> v_manifest); //!< File manifest path.
     
     if(tofree)
         free(tofree);
