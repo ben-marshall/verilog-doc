@@ -9,6 +9,7 @@ A file of todo-lists, notes, and other useful stuff.
 
 ### Features
 
+- [ ] A `-I` flag for parser include directories.
 - [ ] File name sourcing for each construct.
 - [ ] Better library for JSON emission.
 - [ ] Module Page JSON Emission
@@ -27,7 +28,7 @@ A file of todo-lists, notes, and other useful stuff.
 - [ ] Travis Build Integration
 - [ ] Proper testing framework
 - [ ] Coveralls integration
-- [ ] A top-level makefile for quick / easy access to stuff.
+- [X] A top-level makefile for quick / easy access to stuff.
 
 ---
 
