@@ -27,7 +27,7 @@ A file of todo-lists, notes, and other useful stuff.
 - [X] Coverage Checking
 - [X] Travis Build Integration
 - [X] Proper testing framework
-- [ ] Coveralls integration
+- [X] Coveralls integration
 - [X] A top-level makefile for quick / easy access to stuff.
 
 ---

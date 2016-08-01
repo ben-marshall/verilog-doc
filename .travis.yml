@@ -22,9 +22,13 @@ before_script:
 script:
  - make debug
  - make coverage
+ - make test-debug
+ - make test-coverage
 
 after_success:
  - echo "Success"
+ - coveralls -b ./build/coverage/src/CMakeFiles/veridoccore.dir/
+ - coveralls -b ./build/coverage/src/CMakeFiles/veridoc.dir/
 
 after_failure:
  - echo "Failure"

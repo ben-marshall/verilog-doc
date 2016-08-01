@@ -3,6 +3,7 @@
 
 [![Documentation](https://codedocs.xyz/ben-marshall/verilog-doc.svg)](https://codedocs.xyz/ben-marshall/verilog-doc/)
 [![Build Status](https://travis-ci.org/ben-marshall/verilog-doc.svg?branch=master)](https://travis-ci.org/ben-marshall/verilog-doc)
+[![Coverage Status](https://coveralls.io/repos/github/ben-marshall/verilog-doc/badge.svg?branch=master)](https://coveralls.io/github/ben-marshall/verilog-doc?branch=master)
 ![Licence: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
 ---
