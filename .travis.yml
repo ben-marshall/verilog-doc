@@ -17,6 +17,9 @@ install:
  - sudo pip install cpp-coveralls
 
 before_script:
+ - cd ./src/verilog-parser/tests
+ - source ../bin/setup-tests.sh
+ - cd -
  - make setup
 
 script:
