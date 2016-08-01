@@ -2,6 +2,7 @@
 # Verilog Doc
 
 [![Documentation](https://codedocs.xyz/ben-marshall/verilog-doc.svg)](https://codedocs.xyz/ben-marshall/verilog-doc/)
+[![Build Status](https://travis-ci.org/ben-marshall/verilog-doc.svg?branch=master)](https://travis-ci.org/ben-marshall/verilog-doc)
 ![Licence: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
 ---
