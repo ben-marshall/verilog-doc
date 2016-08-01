@@ -325,16 +325,21 @@ void veridoc_pf_export_module_ports_json(
 ){
     if(module -> module_ports == NULL) {return;}
 
+    printf("Ports for module: %s\n", ast_identifier_tostring(module -> identifier));
+
     int i;  // Iterator variable.
     json_begin_list(fh, "ports");
     for(i = 0; i < module -> module_ports -> items; i++)
     {
         ast_port_declaration * port = ast_list_get(module -> module_ports, i);
-        if(port == NULL) {continue;}
-        if(port -> port_names == NULL) {continue;}
+        assert(port != NULL);
+        assert(port -> port_names != NULL);
+
         ast_identifier         id   = ast_list_get(port -> port_names,0);
-        if(id == NULL){continue;}
+        assert(id != NULL);
+
         char                * idstr = ast_identifier_tostring(id);
+        printf("\tPort: %s\n", idstr);
 
         char * p_type;
         char * p_dir;
