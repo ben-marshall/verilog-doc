@@ -2,7 +2,7 @@
 
 echo "------------------- Setting Up Verilog-Doc Workspace -----------------"
 
-git submodule update --remote src/verilog-parser/
+git submodule update --init --recursive
 
 rm -rf ./build
 
