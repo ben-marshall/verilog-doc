@@ -102,45 +102,7 @@ void veridoc_pf_export_file_list_json(
     veridoc_manifest * manifest,
     char             * destination
 ){
-    FILE * fh = fopen(destination, "w");
-    if(!(fh)){
-        printf("ERROR: Could not open json file for writing: %s\n",
-            destination);
-        return;
-    }
 
-    fprintf(fh, "var veridocFileList = {");
-
-    json_emit_str(fh,"listType","file-manifest");
-    json_sepp(fh);
-    json_emit_str(fh,"listTitle","List of documented files.");
-    json_sepp(fh);
-    json_emit_str(fh,"listNotes","This is the list of all files specified as input to Veridoc, along with their parse status.");
-    json_sepp(fh);
-    json_begin_list(fh,"listData");
-
-    int f;
-    for(f = 0; f < manifest -> file_count;  f++)
-    {
-        fprintf(fh,"{");
-
-        veridoc_manifest_file file = manifest -> files[f];
-
-        json_emit_str(fh,"path",file.path);
-        json_sepp(fh);
-        json_emit_int(fh,"parsed",file.parsed);
-        json_sepp(fh);
-        json_emit_int(fh,"success",file.parse_success);
-
-        fprintf(fh,"}");
-        if(f < manifest -> file_count -1){
-            json_sepp(fh);
-        }
-    }
-
-    json_end_list(fh);
-    fprintf(fh,"};");
-    fclose(fh);
 }
 
 
@@ -151,49 +113,6 @@ void veridoc_pf_export_module_list_json(
     verilog_source_tree * source,
     char                * destination
 ){
-    FILE * fh = fopen(destination, "w");
-    if(!(fh)){
-        printf("ERROR: Could not open json file for writing: %s\n",
-            destination);
-        return;
-    }
-
-    fprintf(fh, "var veridocModuleList = {");
-
-    json_emit_str(fh,"listType" ,"module-manifest");
-    json_sepp(fh);
-    json_emit_str(fh,"listTitle","List Of Documented Modules");
-    json_sepp(fh);
-    json_emit_str(fh,"listNotes","This is a list of all hardware modules documented.");
-    json_sepp(fh);
-    json_begin_list(fh,"listData");
-
-    int m;
-    for(m = 0; m < source -> modules -> items; m++)
-    {
-        fprintf(fh,"{");
-        
-        ast_module_declaration * module = ast_list_get(source -> modules,m);
-
-        char * identifier = ast_identifier_tostring(module -> identifier);
-        
-        json_emit_str(fh,"id",identifier);
-        free(identifier);
-        json_sepp(fh);
-        json_emit_str(fh,"brief","None");
-        json_sepp(fh);
-        json_emit_str(fh,"file",module -> meta.file);
-
-
-        fprintf(fh,"}");
-        if(m < source -> modules -> items - 1){
-            json_sepp(fh);
-        }
-    }
-    
-    json_end_list(fh);
-    fprintf(fh, "};");
-    fclose(fh);
 }
 
 /*!
@@ -208,42 +127,6 @@ void veridoc_pf_export_hierarchy_json_r(
     verilog_source_tree     * source,
     FILE                    * fh
 ){
-    ast_list * children = verilog_module_get_children(parent_module);
-
-    fprintf(fh,"[");
-    int c;
-
-    for(c = 0; c < children -> items; c++)
-    {
-        ast_module_instantiation * child = ast_list_get(children,c);
-
-        char * child_id;
-
-        if(child -> resolved){
-            child_id = child -> declaration -> identifier -> identifier;
-        } else {
-            child_id = child -> module_identifer -> identifier;
-        }
-
-        fprintf(fh,"{");
-        fprintf(fh,"\"id\":\"%s\",", child_id);
-        fprintf(fh,"\"children\":");
-        if(child -> resolved)
-        {
-            veridoc_pf_export_hierarchy_json_r(child->declaration,source,fh);
-        }
-        else
-        {
-            fprintf(fh,"[]");
-        }
-        fprintf(fh,"}\n");
-        if(c!=children -> items-1)
-        {
-            fprintf(fh,",");
-        }
-    }
-    
-    fprintf(fh,"]");
 }
 
 /*!
@@ -256,41 +139,6 @@ void veridoc_pf_export_hierarchy_json(
     verilog_source_tree * source,
     char                * destination
 ){
-    FILE * fh = fopen(destination, "w");
-    if(!(fh)){
-        printf("ERROR: Could not open json file for writing: %s\n",
-            destination);
-        return;
-    }
-
-    fprintf(fh, "var veridocModuleHierarchy = {");
-
-    fprintf(fh,"\"listType\":\"module-hierarchy\",");
-    fprintf(fh,"\"listTitle\":\"Module Hierarchy\",");
-    fprintf(fh,"\"listNotes\":\"This is the module hierarchy for the project.\",");
-    fprintf(fh,"\"listData\":[");
-
-    ast_identifier root_id = ast_new_identifier(top_module,0);
-    ast_module_declaration * root = verilog_find_module_declaration(
-        source, root_id);
-    if(root == NULL)
-    {
-        printf("ERROR: Could not find top module: '%s'\n", top_module);
-        free(root_id);
-        return;
-    }
-    else
-    {
-
-        fprintf(fh,"{");
-        fprintf(fh,"\"id\":\"%s\",", top_module);
-        fprintf(fh,"\"children\":");
-        veridoc_pf_export_hierarchy_json_r(root,source,fh);
-        fprintf(fh,"}");
-    }
-
-    fprintf(fh, "]}");
-    fclose(fh);
 }
 
 char * veridoc_pf_module_filename(
@@ -325,51 +173,6 @@ void veridoc_pf_export_module_ports_json(
     veridoc_config         * config,
     ast_module_declaration * module
 ){
-    if(module -> module_ports == NULL) {return;}
-
-    unsigned int i;  // Iterator variable.
-    json_begin_list(fh, "ports");
-    for(i = 0; i < module -> module_ports -> items; i++)
-    {
-        ast_port_declaration * port = ast_list_get(module -> module_ports, i);
-        assert(port != NULL);
-        assert(port -> port_names != NULL);
-
-        ast_identifier         id   = ast_list_get(port -> port_names,0);
-        assert(id != NULL);
-
-        char                * idstr = ast_identifier_tostring(id);
-
-        char * p_type;
-        char * p_dir;
-        char * p_range = "? : ?";
-
-        if(port -> is_reg) p_type = "reg";
-        else if(port -> is_variable) p_type = "var";
-        else p_type = "wire";
-
-        switch(port -> direction){
-            case PORT_INPUT:
-                p_dir = "Input"; break;
-            case PORT_INOUT:
-                p_dir = "Inout"; break;
-            case PORT_OUTPUT:
-                p_dir = "Output"; break;
-            default:
-                p_dir = "Unknown"; break;
-        }
-        
-        fprintf(fh,"{");
-        json_emit_str(fh,"name",idstr); json_sepp(fh);
-        json_emit_str(fh,"type",p_type); json_sepp(fh);
-        json_emit_str(fh,"range",p_range); json_sepp(fh);
-        json_emit_str(fh,"direction",p_dir); json_sepp(fh);
-        fprintf(fh,"}");
-        
-        free(idstr);
-        if(i < module -> module_ports -> items - 1) json_sepp(fh);
-    }
-    json_end_list(fh); json_sepp(fh);
 }
 
 /*!
@@ -381,81 +184,6 @@ void veridoc_pf_export_module_json(
     veridoc_config         * config,
     ast_module_declaration * module
 ){
-    char * module_id = ast_identifier_tostring(module -> identifier);
-    char * file_name = veridoc_pf_module_filename(config,module);
-
-    FILE * fh = fopen(file_name, "w");
-    if(!(fh)){
-        printf("ERROR: Could not open json file for writing: %s\n",file_name);
-        free(module_id);
-        free(file_name);
-        return;
-    }
-    
-    fprintf(fh, "var veridocModuleInformation= {");
-    json_emit_str(fh,"moduleName" , module_id); json_sepp(fh);
-    json_emit_str(fh,"moduleFile" , module -> meta.file); json_sepp(fh);
-    json_emit_int(fh,"moduleLine" , module->meta.line); json_sepp(fh);
-    json_emit_str(fh,"moduleBrief", "None"); json_sepp(fh);
-
-    json_begin_list(fh,"children");
-    int i;
-    if(module -> module_instantiations)
-    {
-        for(i=0; i < module -> module_instantiations -> items; i++)
-        {
-            ast_module_instantiation * inst = 
-                ast_list_get(module->module_instantiations,i);
-            if(inst == NULL){continue;}
-
-            char * id;
-            if(inst -> resolved)
-            {
-                id = ast_identifier_tostring(inst->declaration -> identifier);
-            }
-            else
-            {
-                id = ast_identifier_tostring(inst->module_identifer);
-            }
-            fprintf(fh,"\"%s\"",id);
-            if(i < module -> module_instantiations->items-1){fprintf(fh,",");}
-            free(id);
-        }
-    }
-    json_end_list(fh); json_sepp(fh);
-
-    veridoc_pf_export_module_ports_json(fh,config,module);
-
-    json_begin_list(fh, "params");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "instantiations");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "nets");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "tasks");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "functions");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "variables");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "initials");
-    json_end_list(fh); json_sepp(fh);
-    
-    json_begin_list(fh, "processes");
-    json_end_list(fh);
-
-
-    fprintf(fh,"};");
-    fprintf(fh,"\n\nveridoc_render_module();\n");
-
-    free(module_id);
-    free(file_name);
 }
 
 
