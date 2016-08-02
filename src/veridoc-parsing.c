@@ -55,6 +55,7 @@ void veridoc_parse_manifest_files(
 
         if(fh)
         {
+            verilog_preprocessor_set_file(yy_preproc, record -> path);
             int result = verilog_parse_file(fh);
             
             record -> parsed        = BOOL_TRUE;
