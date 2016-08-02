@@ -10,7 +10,7 @@ A file of todo-lists, notes, and other useful stuff.
 ### Features
 
 - [X] A `-I` flag for parser include directories.
-- [ ] File name sourcing for each construct.
+- [X] File name sourcing for each construct.
 - [ ] Better library for JSON emission.
 - [ ] Module Page JSON Emission
  - [ ] Nets
