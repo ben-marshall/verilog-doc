@@ -287,6 +287,84 @@ void veridoc_pf_export_module_json(
     veridoc_config         * config,
     ast_module_declaration * module
 ){
+    // Where are we going to put all the JSON data?
+    char * output_file_name = veridoc_pf_module_filename(config,module);
+    json_file * fh          = json_new_file(output_file_name);
+    json_object * top = json_new_object();
+
+    char * module_name = ast_identifier_tostring(module->identifier);
+
+    // Set the standard module properties.
+    json_object_add_string(top, "moduleName",  module_name);
+    json_object_add_string(top, "moduleFile",  module -> meta.file);
+    json_object_add_int   (top, "moduleLine",  module -> meta.line);
+    json_object_add_string(top, "moduleBrief", "None");
+
+    // Add the list of ports
+    unsigned int i_p;
+    json_object * m_ports = json_new_object();
+
+    for(i_p = 0; i_p < module -> module_ports -> items; i_p ++){
+        json_object * toadd = json_new_object();
+        ast_port_declaration * port = ast_list_get(module -> module_ports,i_p);
+
+        char * port_id = ast_identifier_tostring(
+            ast_list_get(port -> port_names,0));
+        char * p_type = "?";
+        char * port_range = "?:?";
+        char * p_dir;
+
+        if(port -> is_reg) p_type = "reg";
+        else if(port -> is_variable) p_type = "var";
+        else p_type = "wire";
+
+        switch(port -> direction){
+            case PORT_INPUT:
+                p_dir = "Input"; break;
+            case PORT_INOUT:
+                p_dir = "Inout"; break;
+            case PORT_OUTPUT:
+                p_dir = "Output"; break;
+            default:
+                p_dir = "Unknown"; break;
+        }
+        
+        json_object_add_string(toadd,"name", port_id);
+        json_object_add_string(toadd,"type", p_type);
+        json_object_add_string(toadd,"range", port_range);
+        json_object_add_string(toadd,"direction", p_dir);
+        
+        json_object_add_object(m_ports,"",toadd);
+    }
+    json_object_add_list(top, "ports", m_ports);
+
+    // Add the list of child modules.
+    unsigned int i_m;
+    json_object * m_children = json_new_object();
+
+    for(i_m = 0; i_m < module -> module_instantiations -> items; i_m++)
+    {
+        json_object * toadd = json_new_object();
+        ast_module_instantiation * inst = ast_list_get(
+            module -> module_instantiations, i_m);
+        
+        char * child_id;
+        if(inst -> resolved){
+            child_id = ast_identifier_tostring(inst->declaration->identifier);
+        } else {
+            child_id = ast_identifier_tostring(inst->module_identifer);
+        }
+
+        json_object_add_string(toadd, "moduleName", child_id);
+        
+        json_object_add_object(m_children, "", toadd);
+    }
+    json_object_add_list(top, "children", m_children);
+
+    // Emit and finish up.
+    json_emit_object(fh,top,"veridocModuleInformation",0);
+    fprintf(fh->fh,"\n\nveridoc_render_module();\n");
+    json_close_file(fh);
 }
 
 
