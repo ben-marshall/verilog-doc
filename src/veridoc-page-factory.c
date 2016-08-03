@@ -22,10 +22,10 @@ void veridoc_pf_copy_assets(
     veridoc_config      * config
 ){
     char * to_copy[4];
-    to_copy[0] = "/module.html";
-    to_copy[1] = "/list.html";
-    to_copy[2] = "/script.js";
-    to_copy[3] = "/style.css";
+    to_copy[0] = "module.html";
+    to_copy[1] = "list.html";
+    to_copy[2] = "script.js";
+    to_copy[3] = "style.css";
 
     size_t src_len = strlen(config -> v_assets_dir);
     size_t tgt_len = strlen(config -> v_output);
@@ -79,12 +79,10 @@ boolean veridoc_pf_setup_output_folder(
     if (stat(config -> v_output, &status) == -1) {
         int result = mkdir(config -> v_output, 0700);
         
-        if(result == 0)
-        {
+        if(result == 0){
             return BOOL_TRUE;
         }
-        else
-        {
+        else{
             return BOOL_FALSE;
         }
     }
@@ -95,14 +93,39 @@ boolean veridoc_pf_setup_output_folder(
 /*!
 @brief Responsible for exporting the list of parsed files to a json data file.
 @param [in] manifest - The list of files.
-@param [in] destination - The file path to write to.
+@param [in] destination - The JSON file to write to.
 @returns Void
 */
 void veridoc_pf_export_file_list_json(
     veridoc_manifest * manifest,
-    char             * destination
+    json_file        * fh
 ){
+    printf("Exporting file list...\n");
+    json_object * top = json_new_object();
+    json_object_add_string(top,"listType","file-manifest");
+    json_object_add_string(top,"listTitle","List of documented files.");
+    json_object_add_string(top,"listNotes","This is the list of all files specified as input to Veridoc, along with their parse status.");
 
+    printf("Added top level...\n");
+
+    json_object * list = json_new_object();
+
+    unsigned int i;
+    for(i = 0; i < manifest -> file_count; i ++){
+        veridoc_manifest_file f = manifest -> files[i];
+        json_object * toadd = json_new_object();
+
+        json_object_add_string(toadd, "path", f.path);
+        json_object_add_int(toadd, "parsed", f.parsed);
+        json_object_add_int(toadd, "success", f.parse_success);
+
+        json_object_add_object(list, "", toadd);
+    }
+
+    json_object_add_list(top,"listData", list);
+    printf("Added list data...\n");
+
+    json_emit_object(fh, top, "veridocFileList", 0);
 }
 
 
@@ -114,6 +137,7 @@ void veridoc_pf_export_module_list_json(
     char                * destination
 ){
 }
+
 
 /*!
 @brief Responsible for emitting the verilog module hierarchy as JSON.
@@ -129,6 +153,7 @@ void veridoc_pf_export_hierarchy_json_r(
 ){
 }
 
+
 /*!
 @brief Responsible for emitting the verilog module hierarchy as JSON.
 @param [in] top_module - The top level module / root of the hierarchy.
@@ -141,6 +166,8 @@ void veridoc_pf_export_hierarchy_json(
 ){
 }
 
+
+//! Creates a uniform filename for a module's JSON data structure.
 char * veridoc_pf_module_filename(
     veridoc_config         * config,
     ast_module_declaration * module
@@ -160,6 +187,7 @@ char * veridoc_pf_module_filename(
     return file_name;
 }
 
+
 /*!
 @brief Function responsible for emitting module port lists as JSON.
 @param [in] fh - File to write the JSON to.
@@ -175,6 +203,7 @@ void veridoc_pf_export_module_ports_json(
 ){
 }
 
+
 /*!
 @brief Function responsible for exporting information on a module as JSON.
 @param [in] config - The veridoc config being adhered to.
@@ -184,6 +213,22 @@ void veridoc_pf_export_module_json(
     veridoc_config         * config,
     ast_module_declaration * module
 ){
+}
+
+
+/*!
+@brief concatenates the config->v_output and supplied filename into a single
+file path and returns it.
+*/
+char * veridoc_pf_jsonfilename(
+    veridoc_config          * config,
+    char                    * filename
+){
+    size_t len = strlen(config -> v_output) + strlen(filename) + 1;
+    char * json_file = calloc(len, sizeof(char));
+    strcat(json_file, config -> v_output);
+    strcat(json_file, filename);
+    return json_file;
 }
 
 
@@ -202,25 +247,20 @@ void veridoc_pf_build(
     veridoc_pf_setup_output_folder(config);
 
     // Next, export the file list as a JSON document.
-    char * json_file = calloc(strlen(config -> v_output) + 16, sizeof(char));
-    strcat(json_file, config -> v_output);
-    strcat(json_file, "/file_list.js");
-    veridoc_pf_export_file_list_json(manifest,json_file);
-    printf("File Manifest:      %s\n", json_file);
-    free(json_file);
+    char * json_file_p =  veridoc_pf_jsonfilename(config, "file_list.js");
+    json_file * json_file_h = json_new_file(json_file_p);
+    veridoc_pf_export_file_list_json(manifest,json_file_h);
+    printf("File Manifest:      %s\n", json_file_p);
+    free(json_file_p);
     
     // Next, export the module list as a JSON document.
-    char * module_file = calloc(strlen(config -> v_output) + 17, sizeof(char));
-    strcat(module_file, config -> v_output);
-    strcat(module_file, "/module_list.js");
+    char * module_file = veridoc_pf_jsonfilename(config, "module_list.js");
     veridoc_pf_export_module_list_json(source,module_file);
     printf("Module Manifest:    %s\n", module_file);
     free(module_file);
     
     // Next, export the module hierarchy as a JSON document.
-    char * module_hier = calloc(strlen(config -> v_output) + 22, sizeof(char));
-    strcat(module_hier, config -> v_output);
-    strcat(module_hier, "/module_hierarchy.js");
+    char * module_hier=veridoc_pf_jsonfilename(config,"module_hierarchy.js");
     veridoc_pf_export_hierarchy_json(config -> v_top_module,source,
         module_hier);
     printf("Module Hierarchy:   %s\n", module_hier);

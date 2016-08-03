@@ -32,21 +32,16 @@ typedef struct json_object_t json_object;
 typedef struct json_file_t{
     char * file_path;   //!< Output file path.
     FILE * fh;          //!< The open file handle.
-    char * towrite;     //!< The next set of data to be written to the file.
 } json_file;
 
 
 /*!
 @brief Creates a new json file handle.
 @param[in] path - File path of the file to create / overwrite.
-@param[in] varName - The name of the first variable (var) in the file, which
-will hold the forthcoming JSON data structure. Iff NULL, no `var X=` will be
-emitted.
 @returns a json_file construct if the output path can be opened, else NULL.
 */
 json_file * json_new_file(
-    char * path,
-    char * varName
+    char * path
 );
 
 //! Frees the memory allocated to a json_file construct and closes the file.
@@ -91,6 +86,20 @@ void json_object_add_object(
     json_object * obj,
     char * key,
     json_object * value
+);
+
+/*!
+@brief emits the supplied object into the supplied file, with an optional
+variable name.
+@param[in] varName - The name of the first variable (var) in the file, which
+will hold the forthcoming JSON data structure. Iff NULL, no `var X=` will be
+emitted.
+*/
+void json_emit_object(
+    json_file   * fh,
+    json_object * toemit,
+    char        * varName,
+    unsigned char as_list
 );
 
 // ---------------------------------------------------------------------

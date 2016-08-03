@@ -15,8 +15,7 @@ emitted.
 @returns a json_file construct if the output path can be opened, else NULL.
 */
 json_file * json_new_file(
-    char * path,
-    char * varName
+    char * path
 ){
     json_file * tr = calloc(1,sizeof(json_file));
 
@@ -30,10 +29,6 @@ json_file * json_new_file(
     }
     else
     {
-        if(varName)
-        {
-            fprintf(tr -> fh, "var %s = \n", varName);
-        }
         return tr;
     }
 }
@@ -44,10 +39,6 @@ void json_close_file(json_file * tofree)
     if(tofree -> fh)
     {
         fclose(tofree -> fh);
-    }
-    if(tofree -> towrite)
-    {
-        free(tofree -> towrite);
     }
 
     free(tofree);
@@ -117,4 +108,68 @@ void json_object_add_object(
     json_kvp * toadd = json_new_kvp(key, JSON_KVP_OBJ);
     toadd -> object = value;
     ast_list_append(obj -> kvps, toadd);
+}
+
+/*!
+@brief emits the supplied object into the supplied file, with an optional
+variable name.
+@param[in] varName - The name of the first variable (var) in the file, which
+will hold the forthcoming JSON data structure. Iff NULL, no `var X=` will be
+emitted.
+@param[in] as_list - Emit using the syntax for a list ([...]) rather than an
+object ({...}).
+*/
+void json_emit_object(
+    json_file   * fh,
+    json_object * toemit,
+    char        * varName,
+    unsigned char as_list
+){
+    assert(fh -> fh); // Make sure the file is open!
+    
+    if(varName){
+        // Should we emit a variable to go with the JSON?
+        fprintf(fh->fh,"var %s = \n", varName);
+    }
+
+    // Now do the actual object emission
+    fprintf(fh->fh, as_list ? "[\n" : "{\n");
+    
+    unsigned int i;
+    for(i = 0; i < toemit -> kvps -> items; i++)
+    {
+        json_kvp * kvp = ast_list_get(toemit -> kvps, i);
+
+        if(!as_list){
+            fprintf(fh->fh, "\"%s\" : ", kvp -> key);
+        }
+
+        switch(kvp -> type)
+        {
+            case JSON_KVP_STR:
+                fprintf(fh->fh, "\"%s\"\n", kvp -> string);
+                break;
+            case JSON_KVP_INT:
+                fprintf(fh->fh, "%d\n", kvp -> integer);
+                break;
+            case JSON_KVP_LIST:
+                json_emit_object(fh, kvp -> object, NULL, 1);
+                break;
+            case JSON_KVP_OBJ:
+                json_emit_object(fh, kvp -> object, NULL, 0);
+                break;
+        }
+
+        if(i < toemit -> kvps -> items - 1){
+            fprintf(fh -> fh, ",");
+        }
+    }
+
+    fprintf(fh->fh, as_list ? "]\n" : "}\n");
+
+
+    if(varName){
+        // Do we need to close off a variable declaration?
+        fprintf(fh->fh,";\n");
+    }
 }

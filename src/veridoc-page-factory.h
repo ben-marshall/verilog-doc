@@ -25,7 +25,7 @@ documentation pages.
 */
 void veridoc_pf_export_file_list_json(
     veridoc_manifest * manifest,
-    char             * destination
+    json_file        * fh
 );
 
 
