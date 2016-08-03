@@ -11,7 +11,7 @@ A file of todo-lists, notes, and other useful stuff.
 
 - [X] A `-I` flag for parser include directories.
 - [X] File name sourcing for each construct.
-- [ ] Better library for JSON emission.
+- [X] Better library for JSON emission.
 - [ ] Module Page JSON Emission
  - [ ] Nets
  - [ ] Ports
