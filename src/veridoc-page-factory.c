@@ -163,29 +163,81 @@ void veridoc_pf_export_module_list_json(
 
 /*!
 @brief Responsible for emitting the verilog module hierarchy as JSON.
-@note This is the recursive partner to @ref veridoc_pf_export_hierarchy_json
-@param [in] parent_module - The parent module.
-@param [in] source - The parsed source tree
-@param [in] fh - The file handle to use when writing.
-*/
-void veridoc_pf_export_hierarchy_json_r(
-    ast_module_declaration  * parent_module,
-    verilog_source_tree     * source,
-    FILE                    * fh
-){
-}
-
-
-/*!
-@brief Responsible for emitting the verilog module hierarchy as JSON.
 @param [in] top_module - The top level module / root of the hierarchy.
 @param [in] source - The parsed source tree
 */
-void veridoc_pf_export_hierarchy_json(
-    char                * top_module,
-    verilog_source_tree * source,
-    char                * destination
+json_object * veridoc_pf_export_hierarchy_json(
+    ast_module_declaration  * top_module,
+    json_file               * destination,
+    unsigned int              depth
 ){
+    
+    if(depth == 0)
+    {
+        json_object * top = json_new_object();
+        json_object_add_string(top,"listType","module-hierarchy");
+        json_object_add_string(top,"listTitle","Module Hierarchy.");
+        json_object_add_string(top,"listNotes","This is the module inheritance hierarchy for the project.");
+
+        json_object * listdata = json_new_object();
+        json_object * module   = json_new_object();
+        
+        char * top_id = ast_identifier_tostring(top_module->identifier);
+
+        json_object_add_string(module, "id",   top_id);
+        json_object_add_string(module, "file", top_module -> meta.file);
+        json_object_add_int   (module, "line", top_module -> meta.line);
+        json_object_add_int   (module, "depth", depth);
+
+        // Recurse down the list of children.
+        json_object * children = veridoc_pf_export_hierarchy_json(
+            top_module, destination, depth+1);
+        json_object_add_list(module,"children", children);
+
+        json_object_add_object(listdata, "", module);
+        json_object_add_list(top,"listData",listdata);
+        json_emit_object(destination, top, "veridocModuleHierarchy", 0);
+        return;
+    }
+    else
+    {
+
+        ast_list    * children = verilog_module_get_children(top_module);
+        json_object * tr       = json_new_object();
+
+        unsigned int m;
+        for(m = 0; m < children -> items; m++)
+        {
+            ast_module_instantiation * child = ast_list_get(children, m);
+            char * child_id;
+            json_object * child_list;
+            json_object * child_obj = json_new_object();;
+
+            if(child -> resolved){
+                 child_id = ast_identifier_tostring(
+                    child->declaration->identifier);
+            } else {
+                 child_id = ast_identifier_tostring(child->module_identifer);
+            }
+
+            json_object_add_string(child_obj, "id", child_id);
+            json_object_add_string(child_obj, "file", child -> meta.file);
+            json_object_add_int   (child_obj, "line", child -> meta.line);
+            json_object_add_int   (child_obj, "depth", depth);
+            
+            if(child -> resolved){
+                child_list = veridoc_pf_export_hierarchy_json(
+                child -> declaration, destination, depth + 1);
+            } else {
+                child_list = json_new_object();
+            }
+
+            json_object_add_list(child_obj,"children", child_list);
+            json_object_add_object(tr,"",child_obj);
+        }
+
+        return tr;
+    }
 }
 
 
@@ -265,6 +317,13 @@ void veridoc_pf_build(
     veridoc_config      * config,
     verilog_source_tree * source
 ){
+    // Make sure we can find the module supposedly at the hierarchy root.
+    ast_module_declaration * top_module = verilog_find_module_declaration(
+        source,
+        ast_new_identifier(config -> v_top_module, 0)
+    );
+
+
     // First, we need to setup the output directory.
     veridoc_pf_setup_output_folder(config);
     
@@ -274,19 +333,26 @@ void veridoc_pf_build(
     
     json_file * json_file_h   = json_new_file(json_file_p);
     json_file * module_file_h = json_new_file(module_file);
+    json_file * module_hier_h = json_new_file(module_hier);
 
     veridoc_pf_export_file_list_json(manifest,json_file_h);
     veridoc_pf_export_module_list_json(source,module_file_h);
     
+    if(!top_module){
+        printf("ERROR: Could not find the top module '%s' in the source.\n",
+            config -> v_top_module);
+        printf("\tThe module hierarchy page will not work.\n");
+    } else {
+        veridoc_pf_export_hierarchy_json(top_module, module_hier_h, 0);
+    }
+    
     free(json_file_p);
     free(module_file);
-    
-    // Next, export the module hierarchy as a JSON document.
-    veridoc_pf_export_hierarchy_json(config -> v_top_module,source,
-        module_hier);
-    printf("Module Hierarchy:   %s\n", module_hier);
     free(module_hier);
 
+    json_close_file(json_file_h);
+    json_close_file(module_file_h);
+    json_close_file(module_hier_h);
 
     // Next, export the individual module pages.
     printf("Exporting Module Documentation: ");

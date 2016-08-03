@@ -43,10 +43,10 @@ void veridoc_pf_export_module_list_json(
 @param [in] top_module - The top level module / root of the hierarchy.
 @param [in] source - The parsed source tree
 */
-void veridoc_pf_export_hierarchy_json(
-    char                * top_module,
-    verilog_source_tree * source,
-    char                * destination
+json_object * veridoc_pf_export_hierarchy_json(
+    ast_module_declaration  * top_module,
+    json_file               * destination,
+    unsigned int              depth
 );
 
 
