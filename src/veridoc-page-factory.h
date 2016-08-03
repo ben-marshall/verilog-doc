@@ -34,7 +34,7 @@ void veridoc_pf_export_file_list_json(
 */
 void veridoc_pf_export_module_list_json(
     verilog_source_tree * source,
-    char                * destination
+    json_file        * fh
 );
 
 
