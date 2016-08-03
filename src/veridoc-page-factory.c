@@ -261,23 +261,6 @@ char * veridoc_pf_module_filename(
     return file_name;
 }
 
-
-/*!
-@brief Function responsible for emitting module port lists as JSON.
-@param [in] fh - File to write the JSON to.
-@param [in] config - The current veridoc config.
-@param [in] module - The module who's ports we are documenting.
-@todo Export the bit width of the variables properly. Requires work to the
-underlying verilog-parser library.
-*/
-void veridoc_pf_export_module_ports_json(
-    FILE                   * fh,
-    veridoc_config         * config,
-    ast_module_declaration * module
-){
-}
-
-
 /*!
 @brief Function responsible for exporting information on a module as JSON.
 @param [in] config - The veridoc config being adhered to.
