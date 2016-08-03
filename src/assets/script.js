@@ -176,8 +176,8 @@ function veridoc_render_module(){
     {
         var li = document.createElement("li");
         var link = document.createElement("a");
-        link.setAttribute("href", "module.html?m="+data.children[i]);
-        link.innerText = data.children[i];
+        link.setAttribute("href", "module.html?m="+data.children[i].moduleName);
+        link.innerText = data.children[i].moduleName;
         li.appendChild(link);
         hierKids.appendChild(li);
     }
