@@ -82,8 +82,14 @@ function veridoc_render_module_hierarchy(
     rootModule,
     container
 ){
-    var tr = "<div>"+
-        "<a href='module.html?m="+rootModule.id+"'>"+rootModule.id+"</a>";
+    var tr = document.createElement("div");
+    var link = document.createElement("a");
+    var newcontainer = document.createElement("span");
+    link.innerText = rootModule.id;
+    link.setAttribute("href", "module.html?m="+rootModule.id);
+
+    tr.appendChild(link);
+    tr.appendChild(newcontainer);
 
     var i;
 
@@ -94,10 +100,10 @@ function veridoc_render_module_hierarchy(
 
     for(i = 0; i < rootModule.children.length; i++)
     {
-        tr +=veridoc_render_module_hierarchy(rootModule.children[i],container);
+        var ta = veridoc_render_module_hierarchy(rootModule.children[i],
+                                                                    container);
+        newcontainer.appendChild(ta);
     }
-
-    tr += "</div>";
     return tr;
 }
 
@@ -125,8 +131,8 @@ function veridoc_render_list(
     } else if (listType == "module-manifest") {
         veridoc_render_module_list(listData, container);  
     } else if (listType == "module-hierarchy") {
-        container.innerHTML +=
-            veridoc_render_module_hierarchy(listData[0], container);  
+        container.appendChild( 
+            veridoc_render_module_hierarchy(listData[0], container));  
     } else {
         container.innerText = "Error: unknown list type: "+listType;
     }
