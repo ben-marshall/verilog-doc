@@ -161,7 +161,7 @@ function veridoc_new_module_section(
 ){
     if(data != null)
     {
-        var content = data.content;
+        var content = document.createElement("div"); 
         var count   = data.count;
 
         var cid     = "pcontent_"+title.replace(" ","_");
@@ -184,6 +184,7 @@ function veridoc_new_module_section(
         
         sectionTitle.setAttribute("onclick","veridoc_toggle_visible('"+cid+"')");
         content.style.display = 'none'; // Hide Initially.
+        content.appendChild(data.content);
         sectionContent.appendChild(content);
     }
 }
