@@ -56,8 +56,6 @@ function veridoc_render_module_list(
     listData,
     container
 ){
-    var toset = ""
-
     listData = listData.sort(function(a,b){
         if(a.id>=b.id){return 1;}
         else {return -1;}
@@ -67,15 +65,21 @@ function veridoc_render_module_list(
     for(i = 0; i < listData.length; i++)
     {
         var item = listData[i];
+
+        var toadd = document.createElement("li");
+        var div1 = document.createElement("span");
+        var div2 = document.createElement("span");
         
-        toset += "<li>";
-        toset += "<div class='item'><a href='module.html?m="+item.id+"'>"+
-                 item.id+"</a></div>";
-        toset += "</li>"
+        div1.innerHTML = "<a href='module.html?m="+item.id+"'>"+item.id+"</a>";
+        div1.setAttribute("class","item");
 
+        div2.innerHTML = item.file + " - line <b>"+item.line+"</b>";
+        div2.style.float='right';
+
+        toadd.appendChild(div1);
+        toadd.appendChild(div2);
+        container.appendChild(toadd);
     }
-
-    container.innerHTML = toset;
 }
 
 function veridoc_render_module_hierarchy(
