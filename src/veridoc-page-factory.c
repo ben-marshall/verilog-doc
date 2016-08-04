@@ -306,6 +306,42 @@ json_object * veridoc_pf_export_module_ports_json(
     return m_ports;
 }
 
+/*!
+@brief Responsible for creating a json_object node which describes all of the
+module parameters for the supplied module.
+*/
+json_object * veridoc_pf_export_module_params_json(
+    ast_module_declaration * module
+){
+    unsigned int i;
+    json_object * m_params = json_new_object();
+    
+    for(i=0; i<module -> module_parameters->items;i++)
+    {
+        ast_parameter_declarations * param =
+                                ast_list_get(module -> module_parameters,i);
+        
+        unsigned int j;
+        for(j=0; j < param -> assignments -> items; j ++)
+        {
+            json_object * toadd = json_new_object();
+            ast_single_assignment*assign = ast_list_get(param->assignments,j);
+            ast_lvalue * lv = assign -> lval;
+            
+            if(lv -> type == PARAM_ID){
+                char * pname = ast_identifier_tostring(lv->data.identifier);
+                char * pval  = ast_expression_tostring(assign -> expression);
+
+                json_object_add_string(toadd, "name",pname);
+                json_object_add_string(toadd, "default",pval);
+                
+                json_object_add_object(m_params,"",toadd);
+            }
+        }
+    }
+
+    return m_params;
+}
 
 /*!
 @brief Responsible for creating a json_object node which describes all of the
@@ -366,6 +402,19 @@ void veridoc_pf_export_module_json(
     // Add the list of child modules.
     json_object * module_kids = veridoc_pf_export_module_children_json(module);
     json_object_add_list(top, "children", module_kids);
+
+    // Add the list of module parameters
+    json_object * module_params = veridoc_pf_export_module_params_json(module);
+    json_object_add_list(top, "parameters", module_params);
+
+    // Add the list of internal variable & net declarations
+    json_object * module_vars  = NULL;
+
+    // Add the list of internal tasks & functions
+    json_object * module_funcs  = NULL;
+
+    // Add the list of internal process blocks (initial & others)
+    json_object * module_blocks = NULL;
 
     // Emit and finish up.
     json_emit_object(fh,top,"veridocModuleInformation",0);

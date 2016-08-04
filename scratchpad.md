@@ -14,10 +14,10 @@ A file of todo-lists, notes, and other useful stuff.
 - [X] Better library for JSON emission.
 - [ ] Module Page JSON Emission
  - [ ] Nets
- - [ ] Ports
- - [ ] Parameters
+ - [X] Ports
+ - [X] Parameters
  - [ ] Functions / Tasks
- - [ ] Instantiations
+ - [X] Instantiations
  - [ ] Processes / Blocks
 - [X] Module Page JSON Rendering
 - [X] HTML "Distribution" creation
