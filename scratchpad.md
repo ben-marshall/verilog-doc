@@ -13,12 +13,13 @@ A file of todo-lists, notes, and other useful stuff.
 - [X] File name sourcing for each construct.
 - [X] Better library for JSON emission.
 - [ ] Module Page JSON Emission
- - [ ] Nets
+ - [X] Nets
  - [X] Ports
  - [X] Parameters
- - [ ] Functions / Tasks
+ - [X] Functions / Tasks
  - [X] Instantiations
- - [ ] Processes / Blocks
+ - [X] Processes / Blocks
+- [ ] Complete display of all JSON data.
 - [X] Module Page JSON Rendering
 - [X] HTML "Distribution" creation
 

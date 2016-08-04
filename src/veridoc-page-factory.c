@@ -343,6 +343,134 @@ json_object * veridoc_pf_export_module_params_json(
     return m_params;
 }
 
+/*! @brief Iterates over a list of ast_var_declaration and adds a json 
+ representation to the supplied add_to list object.
+@bug Sometimes td=ast_list_get(to_itter,i) returns NULL.
+*/
+json_object * veridoc_pf_itter_vardecs(
+    char        * decType, //!< Value for the JSON "type" property
+    ast_list    * to_itter, //!< A list of ast_var_declaration* objects.
+    json_object ** add_to    //!< Something to add the json objects to.
+){
+    unsigned int i;
+    unsigned int j;
+    for(i=0; i< to_itter -> items;i++)
+    {
+        ast_var_declaration * td = ast_list_get(to_itter,i);
+        if(td == NULL){continue;}
+
+        json_object * toadd = json_new_object();
+                
+        char * name      = ast_identifier_tostring(td -> identifier);
+
+        json_object_add_string(toadd,"name",name);
+        json_object_add_string(toadd,"type",decType);
+        json_object_add_string(toadd,"file", td -> meta.file);
+        json_object_add_int   (toadd,"line", td -> meta.line);
+
+        json_object_add_object(*add_to, "", toadd);
+    }
+    
+    return *add_to;
+}
+
+/*! @brief Iterates over a list of ast_var_declaration and adds a json 
+representation to the supplied add_to list object.
+@bug Sometimes td=ast_list_get(to_itter,i) returns NULL.
+*/
+json_object * veridoc_pf_itter_netdecs(
+    ast_list    * to_itter, //!< A list of ast_net_declaration* objects.
+    json_object ** add_to    //!< Something to add the json objects to.
+){
+    unsigned int i;
+    for(i=0; i< to_itter -> items;i++)
+    {
+        ast_net_declaration * td = ast_list_get(to_itter,i);
+        if(td == NULL){continue;}
+
+        json_object * toadd = json_new_object();
+                
+        char * name      = ast_identifier_tostring(td -> identifier);
+        char * range     = "?";
+        char * nettype   = "?";
+
+        json_object_add_string(toadd,"name",name);
+        json_object_add_string(toadd,"type","net");
+        json_object_add_string(toadd,"nettype",nettype);
+        json_object_add_string(toadd,"range",range);
+        json_object_add_int   (toadd,"vectored",td -> vectored);
+        json_object_add_int   (toadd,"scalared",td -> scalared);
+        json_object_add_int   (toadd,"signed",td -> is_signed);
+        json_object_add_string(toadd,"file", td -> meta.file);
+        json_object_add_int   (toadd,"line", td -> meta.line);
+
+        json_object_add_object(*add_to, "", toadd);
+    }
+    
+    return *add_to;
+}
+
+/*! @brief Iterates over a list of ast_reg_declaration and adds a json 
+representation to the supplied add_to list object.
+@bug Sometimes td=ast_list_get(to_itter,i) returns NULL.
+*/
+json_object * veridoc_pf_itter_regdecs(
+    ast_list    * to_itter, //!< A list of ast_reg_declaration* objects.
+    json_object ** add_to    //!< Something to add the json objects to.
+){
+    unsigned int i;
+    for(i=0; i< to_itter -> items;i++)
+    {
+        ast_reg_declaration * td = ast_list_get(to_itter,i);
+        if(td == NULL){printf("\tskip\n");continue;}
+
+        json_object * toadd = json_new_object();
+                
+        char * name      = ast_identifier_tostring(td -> identifier);
+        char * range     = "?";
+        char * nettype   = "?";
+
+        json_object_add_string(toadd,"name",name);
+        json_object_add_string(toadd,"type","reg");
+        json_object_add_string(toadd,"range",range);
+        json_object_add_int   (toadd,"signed",td -> is_signed);
+        json_object_add_string(toadd,"file", td -> meta.file);
+        json_object_add_int   (toadd,"line", td -> meta.line);
+
+        json_object_add_object(*add_to, "", toadd);
+    }
+    
+    return *add_to;
+}
+
+/*!
+@brief Responsible for creating a json_object node which describes all of the
+module nets and variables for the supplied module.
+@details Looks through:
+module -> genvar_declarations
+module -> integer_declarations
+module -> net_declarations
+module -> real_declarations
+module -> realtime_declarations
+module -> reg_declarations
+module -> time_declarations
+*/
+json_object * veridoc_pf_export_module_vars_json(
+    ast_module_declaration * module
+){
+    json_object * m_nets = json_new_object();
+    
+    veridoc_pf_itter_netdecs(module -> net_declarations,&m_nets);
+    veridoc_pf_itter_regdecs(module -> reg_declarations,&m_nets);
+    veridoc_pf_itter_vardecs("genvar",module -> genvar_declarations,&m_nets);
+    veridoc_pf_itter_vardecs("integer",module->integer_declarations,&m_nets);
+    veridoc_pf_itter_vardecs("real",module->real_declarations,&m_nets);
+    veridoc_pf_itter_vardecs("realtime",module->realtime_declarations,&m_nets);
+    veridoc_pf_itter_vardecs("time",module -> time_declarations,&m_nets);
+
+    return m_nets;
+}
+
 /*!
 @brief Responsible for creating a json_object node which describes all of the
 instanced child modules for the supplied module.
@@ -408,7 +536,8 @@ void veridoc_pf_export_module_json(
     json_object_add_list(top, "parameters", module_params);
 
     // Add the list of internal variable & net declarations
-    json_object * module_vars  = NULL;
+    json_object * module_vars  = veridoc_pf_export_module_vars_json(module);
+    json_object_add_list(top, "varDeclarations", module_vars);
 
     // Add the list of internal tasks & functions
     json_object * module_funcs  = NULL;
