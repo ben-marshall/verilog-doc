@@ -334,6 +334,7 @@ json_object * veridoc_pf_export_module_params_json(
 
                 json_object_add_string(toadd, "name",pname);
                 json_object_add_string(toadd, "default",pval);
+                json_object_add_string(toadd, "brief","None");
                 
                 json_object_add_object(m_params,"",toadd);
             }
@@ -367,6 +368,7 @@ json_object * veridoc_pf_itter_vardecs(
         json_object_add_string(toadd,"type",decType);
         json_object_add_string(toadd,"file", td -> meta.file);
         json_object_add_int   (toadd,"line", td -> meta.line);
+        json_object_add_string(toadd,"brief", "None");
 
         json_object_add_object(*add_to, "", toadd);
     }
@@ -403,6 +405,7 @@ json_object * veridoc_pf_itter_netdecs(
         json_object_add_int   (toadd,"signed",td -> is_signed);
         json_object_add_string(toadd,"file", td -> meta.file);
         json_object_add_int   (toadd,"line", td -> meta.line);
+        json_object_add_string(toadd,"brief", "None");
 
         json_object_add_object(*add_to, "", toadd);
     }
@@ -458,17 +461,25 @@ module -> time_declarations
 json_object * veridoc_pf_export_module_vars_json(
     ast_module_declaration * module
 ){
-    json_object * m_nets = json_new_object();
+    json_object * m_tr= json_new_object();
     
-    veridoc_pf_itter_netdecs(module -> net_declarations,&m_nets);
-    veridoc_pf_itter_regdecs(module -> reg_declarations,&m_nets);
-    veridoc_pf_itter_vardecs("genvar",module -> genvar_declarations,&m_nets);
-    veridoc_pf_itter_vardecs("integer",module->integer_declarations,&m_nets);
-    veridoc_pf_itter_vardecs("real",module->real_declarations,&m_nets);
-    veridoc_pf_itter_vardecs("realtime",module->realtime_declarations,&m_nets);
-    veridoc_pf_itter_vardecs("time",module -> time_declarations,&m_nets);
+    json_object * nets = json_new_object();
+    json_object * regs = json_new_object();
+    json_object * vars = json_new_object();
+    
+    veridoc_pf_itter_netdecs(module -> net_declarations,&nets);
+    veridoc_pf_itter_regdecs(module -> reg_declarations,&regs);
+    veridoc_pf_itter_vardecs("genvar",module -> genvar_declarations,&vars);
+    veridoc_pf_itter_vardecs("integer",module->integer_declarations,&vars);
+    veridoc_pf_itter_vardecs("real",module->real_declarations,&vars);
+    veridoc_pf_itter_vardecs("realtime",module->realtime_declarations,&vars);
+    veridoc_pf_itter_vardecs("time",module -> time_declarations,&vars);
 
-    return m_nets;
+    json_object_add_list(m_tr, "nets", nets);
+    json_object_add_list(m_tr, "regs", regs);
+    json_object_add_list(m_tr, "vars", vars);
+
+    return m_tr;
 }
 
 /*!
@@ -537,7 +548,7 @@ void veridoc_pf_export_module_json(
 
     // Add the list of internal variable & net declarations
     json_object * module_vars  = veridoc_pf_export_module_vars_json(module);
-    json_object_add_list(top, "varDeclarations", module_vars);
+    json_object_add_object(top, "declarations", module_vars);
 
     // Add the list of internal tasks & functions
     json_object * module_funcs  = NULL;

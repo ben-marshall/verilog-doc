@@ -132,22 +132,208 @@ function veridoc_render_list(
     }
 }
 
+function veridoc_toggle_visible(elem_id){
+    var elem  = document.getElementById(elem_id);
+    var indicator = document.getElementById(elem_id+"_exp");
+    if(elem.style.display != 'none'){
+        elem.style.display = 'none';
+        indicator.innerText="[+]";
+    } else {
+        elem.style.display = 'inline';
+        indicator.innerText="[-]";
+    }
+}
+
+
 function veridoc_new_module_section(
     title,
-    content
+    data
 ){
-    var pageCont = document.getElementById("page-content");
-    var section = document.createElement("div");
-    var sectionTitle = document.createElement("div");
-    var sectionContent = document.createElement("div");
-    section.appendChild(sectionTitle);
-    section.appendChild(sectionContent);
-    pageCont.appendChild(section);
-    section.setAttribute("class", "page-section");
-    sectionTitle.setAttribute("class", "page-section-title");
-    sectionContent.setAttribute("class", "page-section-content");
-    sectionTitle.innerHTML = "<span class='monospace'>[-]</span> "+title;
-    sectionContent.innerHTML = content;
+    if(data != null)
+    {
+        var content = data.content;
+        var count   = data.count;
+
+        var cid     = "pcontent_"+title.replace(" ","_");
+        content.setAttribute("id",cid);
+
+        var pageCont = document.getElementById("page-content");
+        var section = document.createElement("div");
+        var sectionTitle = document.createElement("div");
+        var sectionContent = document.createElement("div");
+        section.appendChild(sectionTitle);
+        section.appendChild(sectionContent);
+        pageCont.appendChild(section);
+        section.setAttribute("class", "page-section");
+        sectionTitle.setAttribute("class", "page-section-title");
+        sectionContent.setAttribute("class", "page-section-content");
+        sectionTitle.innerHTML = "<span id='"+cid+"_exp' class='monospace'>[+]</span> "+ 
+                                 title + 
+                                 "&nbsp;&nbsp; " +
+                                 "("+count+")";
+        
+        sectionTitle.setAttribute("onclick","veridoc_toggle_visible('"+cid+"')");
+        content.style.display = 'none'; // Hide Initially.
+        sectionContent.appendChild(content);
+    }
+}
+
+/*!
+Creates a table display of module ports
+*/
+function veridoc_render_module_ports(
+    data
+){
+    var table_i = "<thead><td>Name</td><td>Type</td><td>Width</td><td>Direction</td><td>Description</td></thead>";
+
+    for(i = 0; i < data.ports.length; i++)
+    {
+        var port = data.ports[i];
+
+        table_i += "<tr>";
+        table_i += "<td class='monospace'>"+port.name+"</td>";
+        table_i += "<td>"+port.type+"</td>";
+        table_i += "<td>"+port.range+"</td>";
+        table_i += "<td>"+port.direction+"</td>";
+        table_i += "<td>None</td>";
+        table_i += "</tr>";
+    }
+
+    var tr = document.createElement("table");
+    tr.innerHTML = table_i;
+
+    return {content:tr,count:data.ports.length};
+}
+
+
+/*!
+Creates a table display of module parameters
+*/
+function veridoc_render_module_parameters(
+    data
+){
+    if(data.parameters.length == 0){return null;}
+
+    var tr = document.createElement("table");
+    var header = document.createElement("thead");i
+    header.innerHTML = "<td>Name</td><td>Default Value</td><td>Brief</td>";
+
+    for(i = 0; i < data.parameters.length; i++)
+    {
+        var param = data.parameters[i];
+        var row = document.createElement("tr");
+        
+        row.innerHTML="<td>"+param.name + "</td><td>" + 
+                      param.default     + "</td><td>" + 
+                      param.brief       + "</td>";
+
+        tr.appendChild(row);
+    }
+
+    return {content:tr,count:data.parameters.length};
+}
+
+/*!
+Creates a table display of module nets 
+*/
+function veridoc_render_module_nets(
+    data
+){
+    var nets = data.declarations.nets;
+    if(nets.length == 0){return null;}
+
+    var tr = document.createElement("table");
+    var header = document.createElement("thead");
+    header.innerHTML = "<td>Name</td>"+
+                       "<td>Type</td>"+
+                       "<td>Width</td>"+
+                       "<td>Vectored</td>"+
+                       "<td>Scalared</td>"+
+                       "<td>Signed</td>"+
+                       "<td>Description</td>";
+    tr.appendChild(header);
+
+    for(i = 0; i < nets.length; i++)
+    {
+        var net= nets[i];
+        var row = document.createElement("tr");
+        
+        row.innerHTML="<td><span class='codeify'>"+net.name+"</span></td>"+
+                      "<td>"+net.nettype+"</td>"+
+                      "<td>"+net.range+"</td>"+
+                      "<td>"+(net.vectored ? "True" : "False") + "</td>"+
+                      "<td>"+(net.scalared ? "True" : "False") + "</td>"+
+                      "<td>"+(net.signed   ? "True" : "False") + "</td>"+
+                      "<td>"+net.brief+"</td>";
+        tr.appendChild(row);
+    }
+
+    return {content:tr,count:nets.length};
+}
+
+
+/*!
+Creates a table display of module regs 
+*/
+function veridoc_render_module_regs(
+    data
+){
+    var regs = data.declarations.regs;
+    if(regs.length == 0){return null;}
+
+    var tr = document.createElement("table");
+    var header = document.createElement("thead");
+    header.innerHTML = "<td>Name</td>"+
+                       "<td>Type</td>"+
+                       "<td>Width</td>"+
+                       "<td>Signed</td>"+
+                       "<td>Description</td>";
+    tr.appendChild(header);
+
+    for(i = 0; i < regs.length; i++)
+    {
+        var reg= regs[i];
+        var row = document.createElement("tr");
+        
+        row.innerHTML="<td><span class='codeify'>"+reg.name+"</span></td>"+
+                      "<td>"+reg.nettype+"</td>"+
+                      "<td>"+reg.range+"</td>"+
+                      "<td>"+(reg.signed   ? "True" : "False") + "</td>"+
+                      "<td>"+reg.brief+"</td>";
+        tr.appendChild(row);
+    }
+
+    return {content:tr,count:regs.length};
+}
+
+/*!
+Creates a table display of module variables
+*/
+function veridoc_render_module_vars(
+    data
+){
+    var vars = data.declarations.vars;
+    if(vars.length == 0){return null;}
+
+    var tr = document.createElement("table");
+    var header = document.createElement("thead");
+    header.innerHTML = "<td>Name</td>"+
+                       "<td>Type</td>"+
+                       "<td>Description</td>";
+    tr.appendChild(header);
+
+    for(i = 0; i < vars.length; i++)
+    {
+        var v =vars[i];
+        var row = document.createElement("tr");
+        
+        row.innerHTML="<td><span class='codeify'>"+v.name+"</span></td>"+
+                      "<td>"+v.type+"</td>"+
+                      "<td>"+v.brief+"</td>";
+        tr.appendChild(row);
+    }
+
+    return {content:tr,count:vars.length};
 }
 
 
@@ -181,23 +367,16 @@ function veridoc_render_module(){
         li.appendChild(link);
         hierKids.appendChild(li);
     }
+    
+    var ports  = veridoc_render_module_ports(data);
+    var params = veridoc_render_module_parameters(data);
+    var nets   = veridoc_render_module_nets(data);
+    var regs   = veridoc_render_module_regs(data);
+    var vars   = veridoc_render_module_vars(data);
 
-
-    var table = "<table><thead><td>Type</td><td>Width</td><td>Direction</td><td>Name</td><td>Description</td></thead>";
-
-    for(i = 0; i < data.ports.length; i++)
-    {
-        var port = data.ports[i];
-
-        table += "<tr>";
-        table += "<td>"+port.type+"</td>";
-        table += "<td>"+port.range+"</td>";
-        table += "<td>"+port.direction+"</td>";
-        table += "<td class='monospace'>"+port.name+"</td>";
-        table += "<td>None</td>";
-        table += "</tr>";
-    }
-
-    table += "</table>";
-    veridoc_new_module_section("Ports", table);
+    veridoc_new_module_section("Parameters", params);
+    veridoc_new_module_section("Ports", ports);
+    veridoc_new_module_section("Nets", nets);
+    veridoc_new_module_section("Regs", regs);
+    veridoc_new_module_section("Variables", vars);
 }

@@ -16,9 +16,9 @@ A file of todo-lists, notes, and other useful stuff.
  - [X] Nets
  - [X] Ports
  - [X] Parameters
- - [X] Functions / Tasks
- - [X] Instantiations
- - [X] Processes / Blocks
+ - [ ] Functions / Tasks
+ - [ ] Instantiations
+ - [ ] Processes / Blocks
 - [ ] Complete display of all JSON data.
 - [X] Module Page JSON Rendering
 - [X] HTML "Distribution" creation
