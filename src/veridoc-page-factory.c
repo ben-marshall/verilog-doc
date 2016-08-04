@@ -262,34 +262,18 @@ char * veridoc_pf_module_filename(
 }
 
 /*!
-@brief Function responsible for exporting information on a module as JSON.
-@param [in] config - The veridoc config being adhered to.
-@param [in] module - The module to document.
+@brief Responsible for creating a json_object node which describes all of the
+IO ports for the supplied module.
 */
-void veridoc_pf_export_module_json(
-    veridoc_config         * config,
+json_object * veridoc_pf_export_module_ports_json(
     ast_module_declaration * module
 ){
-    // Where are we going to put all the JSON data?
-    char * output_file_name = veridoc_pf_module_filename(config,module);
-    json_file * fh          = json_new_file(output_file_name);
-    json_object * top = json_new_object();
-
-    char * module_name = ast_identifier_tostring(module->identifier);
-
-    // Set the standard module properties.
-    json_object_add_string(top, "moduleName",  module_name);
-    json_object_add_string(top, "moduleFile",  module -> meta.file);
-    json_object_add_int   (top, "moduleLine",  module -> meta.line);
-    json_object_add_string(top, "moduleBrief", "None");
-
-    // Add the list of ports
     unsigned int i_p;
     json_object * m_ports = json_new_object();
 
     for(i_p = 0; i_p < module -> module_ports -> items; i_p ++){
         json_object * toadd = json_new_object();
-        ast_port_declaration * port = ast_list_get(module -> module_ports,i_p);
+        ast_port_declaration * port =ast_list_get(module -> module_ports,i_p);
 
         char * port_id = ast_identifier_tostring(
             ast_list_get(port -> port_names,0));
@@ -319,9 +303,17 @@ void veridoc_pf_export_module_json(
         
         json_object_add_object(m_ports,"",toadd);
     }
-    json_object_add_list(top, "ports", m_ports);
+    return m_ports;
+}
 
-    // Add the list of child modules.
+
+/*!
+@brief Responsible for creating a json_object node which describes all of the
+instanced child modules for the supplied module.
+*/
+json_object * veridoc_pf_export_module_children_json(
+    ast_module_declaration * module
+){
     unsigned int i_m;
     json_object * m_children = json_new_object();
 
@@ -342,7 +334,38 @@ void veridoc_pf_export_module_json(
         
         json_object_add_object(m_children, "", toadd);
     }
-    json_object_add_list(top, "children", m_children);
+    return m_children;
+}
+
+/*!
+@brief Function responsible for exporting information on a module as JSON.
+@param [in] config - The veridoc config being adhered to.
+@param [in] module - The module to document.
+*/
+void veridoc_pf_export_module_json(
+    veridoc_config         * config,
+    ast_module_declaration * module
+){
+    // Where are we going to put all the JSON data?
+    char * output_file_name = veridoc_pf_module_filename(config,module);
+    json_file * fh          = json_new_file(output_file_name);
+    json_object * top = json_new_object();
+
+    char * module_name = ast_identifier_tostring(module->identifier);
+
+    // Set the standard module properties.
+    json_object_add_string(top, "moduleName",  module_name);
+    json_object_add_string(top, "moduleFile",  module -> meta.file);
+    json_object_add_int   (top, "moduleLine",  module -> meta.line);
+    json_object_add_string(top, "moduleBrief", "None");
+
+    // Add the list of ports
+    json_object * module_ports = veridoc_pf_export_module_ports_json(module);
+    json_object_add_list(top, "ports", module_ports);
+
+    // Add the list of child modules.
+    json_object * module_kids = veridoc_pf_export_module_children_json(module);
+    json_object_add_list(top, "children", module_kids);
 
     // Emit and finish up.
     json_emit_object(fh,top,"veridocModuleInformation",0);
