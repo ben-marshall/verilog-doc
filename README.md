@@ -13,7 +13,7 @@ Description Language (HDL).
 
 It is currently under heavy development, and in the early stages of
 construction. None the less, it can parse input source trees using the general
-purpose [https://github.com/ben-marshall/verilog-parser](verilog-parser)
+purpose [verilog-parser](https://github.com/ben-marshall/verilog-parser)
 library and spit out a module hierarchy and file list, as well as document a
 modules ports.
 
