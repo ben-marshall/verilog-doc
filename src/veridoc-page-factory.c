@@ -513,6 +513,37 @@ json_object * veridoc_pf_export_module_children_json(
 }
 
 /*!
+@brief Iterates over all process blocks (initial, always, triggered) and
+returns a JSON data structure representing them.
+@todo Complete this after re-factoring the always block code in the parser
+library.
+*/
+json_object * veridoc_pf_export_module_blocks_json(
+    ast_module_declaration * module
+){
+    json_object * tr = json_new_object();
+
+    // We must loop over both module -> always_blocks and 
+    // module -> initial_blocks
+
+    unsigned int i;
+    for(i = 0; i < module -> always_blocks; i++)
+    {
+        ast_statement * block = ast_list_get(module -> always_blocks, i);
+        if(block -> type != STM_BLOCK){ continue; }
+
+        json_object * toadd = json_new_object();
+        
+        // Do nothing here while the code for expressing statement blocks is
+        // refactored.
+
+        json_object_add_object(tr,"",toadd);
+    }
+    
+    return tr;
+}
+
+/*!
 @brief Function responsible for exporting information on a module as JSON.
 @param [in] config - The veridoc config being adhered to.
 @param [in] module - The module to document.
